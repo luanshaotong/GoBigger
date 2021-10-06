@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>players &mdash; gobigger 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="render" href="render.html" />
+    <link rel="prev" title="managers" href="managers.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> gobigger
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Tutorial</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Doc</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="agents.html">agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="balls.html">balls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html">managers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">players</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#baseplayer">BasePlayer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#humanplayer">HumanPlayer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="render.html">render</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server.html">server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">utils</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">FAQ</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">gobigger</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">API Doc</a> &raquo;</li>
+        
+      <li>players</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api_doc/players.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="players">
+<h1>players<a class="headerlink" href="#players" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="baseplayer">
+<h2>BasePlayer<a class="headerlink" href="#baseplayer" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gobigger.players.base_player.BasePlayer">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">gobigger.players.base_player.</span></code><code class="sig-name descname"><span class="pre">BasePlayer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/base_player.html#BasePlayer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.base_player.BasePlayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Player’s abstract class</p>
+<dl class="py method">
+<dt id="gobigger.players.base_player.BasePlayer.eat">
+<code class="sig-name descname"><span class="pre">eat</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ball</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/base_player.html#BasePlayer.eat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.base_player.BasePlayer.eat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Eat another ball</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.players.base_player.BasePlayer.eject">
+<code class="sig-name descname"><span class="pre">eject</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/base_player.html#BasePlayer.eject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.base_player.BasePlayer.eject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do sporulation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.players.base_player.BasePlayer.move">
+<code class="sig-name descname"><span class="pre">move</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/base_player.html#BasePlayer.move"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.base_player.BasePlayer.move" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Parameters:</dt><dd><p>direction &lt;Vector2&gt;: Given any point in a unit circle, the angle represents the direction, and the magnitude represents the acceleration</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.players.base_player.BasePlayer.stop">
+<code class="sig-name descname"><span class="pre">stop</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/base_player.html#BasePlayer.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.base_player.BasePlayer.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>stop moving</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="humanplayer">
+<h2>HumanPlayer<a class="headerlink" href="#humanplayer" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gobigger.players.human_player.HumanPlayer">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">gobigger.players.human_player.</span></code><code class="sig-name descname"><span class="pre">HumanPlayer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">team_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spore_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/human_player.html#HumanPlayer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.human_player.HumanPlayer" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="gobigger.players.human_player.HumanPlayer.add_balls">
+<code class="sig-name descname"><span class="pre">add_balls</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">balls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/human_player.html#HumanPlayer.add_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.human_player.HumanPlayer.add_balls" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Add new avatars</p>
+</dd>
+<dt>Parameters:</dt><dd><p>balls &lt;List[CloneBall] or CloneBall&gt;: It can be a list or a single doppelganger</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.players.human_player.HumanPlayer.adjust">
+<code class="sig-name descname"><span class="pre">adjust</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/human_player.html#HumanPlayer.adjust"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.human_player.HumanPlayer.adjust" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Adjust all the balls controlled by the player, including two parts
+1. Possible Rigid Body Collision
+2. Possible ball-ball fusion</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.players.human_player.HumanPlayer.cal_centroid">
+<code class="sig-name descname"><span class="pre">cal_centroid</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/human_player.html#HumanPlayer.cal_centroid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.human_player.HumanPlayer.cal_centroid" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Calculate the centroid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.players.human_player.HumanPlayer.eat">
+<code class="sig-name descname"><span class="pre">eat</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ball</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/human_player.html#HumanPlayer.eat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.human_player.HumanPlayer.eat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Eat another ball</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.players.human_player.HumanPlayer.eject">
+<code class="sig-name descname"><span class="pre">eject</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/human_player.html#HumanPlayer.eject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.human_player.HumanPlayer.eject" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>All clones controlled by the player perform the spore-spitting action</p>
+</dd>
+<dt>Return:</dt><dd><p>&lt;list&gt;: list of new spores</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.players.human_player.HumanPlayer.get_balls">
+<code class="sig-name descname"><span class="pre">get_balls</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/human_player.html#HumanPlayer.get_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.human_player.HumanPlayer.get_balls" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Get all the balls of the current player</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.players.human_player.HumanPlayer.get_clone_num">
+<code class="sig-name descname"><span class="pre">get_clone_num</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/human_player.html#HumanPlayer.get_clone_num"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.human_player.HumanPlayer.get_clone_num" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Get how many avatars the current player has</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.players.human_player.HumanPlayer.get_keys_sort_by_balls">
+<code class="sig-name descname"><span class="pre">get_keys_sort_by_balls</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/human_player.html#HumanPlayer.get_keys_sort_by_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.human_player.HumanPlayer.get_keys_sort_by_balls" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Sort by ball size from largest to smallest</p>
+</dd>
+<dt>Return:</dt><dd><p>&lt;list&gt;: list of names</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.players.human_player.HumanPlayer.get_total_size">
+<code class="sig-name descname"><span class="pre">get_total_size</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/human_player.html#HumanPlayer.get_total_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.human_player.HumanPlayer.get_total_size" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview: </dt><dd><p>Get the total size of all balls of the current player</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.players.human_player.HumanPlayer.move">
+<code class="sig-name descname"><span class="pre">move</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/human_player.html#HumanPlayer.move"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.human_player.HumanPlayer.move" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Move all balls controlled by the player
+The main logic is</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Processing stopped state</p></li>
+<li><p>If it is stopping, control all balls to move closer to the center of mass</p></li>
+</ol>
+</div></blockquote>
+</dd>
+<dt>Parameters:</dt><dd><p>direction &lt;Vector2&gt;: A point in the unit circle
+duration &lt;float&gt;: time</p>
+</dd>
+<dt>Returns:</dt><dd><p>position &lt;Vector2&gt;: position after moving</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.players.human_player.HumanPlayer.size_decay">
+<code class="sig-name descname"><span class="pre">size_decay</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/human_player.html#HumanPlayer.size_decay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.human_player.HumanPlayer.size_decay" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview: </dt><dd><p>The player’s balls’ size will decay over time</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.players.human_player.HumanPlayer.split">
+<code class="sig-name descname"><span class="pre">split</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/human_player.html#HumanPlayer.split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.human_player.HumanPlayer.split" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>All avatars controlled by the player perform splits, from large to small</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.players.human_player.HumanPlayer.stop">
+<code class="sig-name descname"><span class="pre">stop</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/players/human_player.html#HumanPlayer.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.players.human_player.HumanPlayer.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>stop moving</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="render.html" class="btn btn-neutral float-right" title="render" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="managers.html" class="btn btn-neutral float-left" title="managers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, OpenDILab Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

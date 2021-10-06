@@ -1,0 +1,648 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>balls &mdash; gobigger 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="managers" href="managers.html" />
+    <link rel="prev" title="agents" href="agents.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> gobigger
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Tutorial</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Doc</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="agents.html">agents</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">balls</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#baseball">BaseBall</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foodball">FoodBall</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thornsball">ThornsBall</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cloneball">CloneBall</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sporeball">SporeBall</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html">managers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="players.html">players</a></li>
+<li class="toctree-l2"><a class="reference internal" href="render.html">render</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server.html">server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">utils</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">FAQ</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">gobigger</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">API Doc</a> &raquo;</li>
+        
+      <li>balls</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api_doc/balls.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="balls">
+<h1>balls<a class="headerlink" href="#balls" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="baseball">
+<h2>BaseBall<a class="headerlink" href="#baseball" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gobigger.balls.base_ball.BaseBall">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">gobigger.balls.base_ball.</span></code><code class="sig-name descname"><span class="pre">BaseBall</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/base_ball.html#BaseBall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.base_ball.BaseBall" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Base class of all balls</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gobigger.balls.base_ball.BaseBall.check_border">
+<code class="sig-name descname"><span class="pre">check_border</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/base_ball.html#BaseBall.check_border"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.base_ball.BaseBall.check_border" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Check to see if the position of the ball exceeds the bounds of the map. 
+If it exceeds, the speed and acceleration in the corresponding direction will be zeroed, and the position will be edged</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.base_ball.BaseBall.default_config">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">default_config</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/base_ball.html#BaseBall.default_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.base_ball.BaseBall.default_config" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Default config</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.base_ball.BaseBall.eat">
+<code class="sig-name descname"><span class="pre">eat</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ball</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/base_ball.html#BaseBall.eat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.base_ball.BaseBall.eat" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Describe the rules of eating and being eaten</p>
+</dd>
+<dt>Parameters:</dt><dd><p>ball &lt;BaseBall&gt;: Eaten ball</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.base_ball.BaseBall.get_dis">
+<code class="sig-name descname"><span class="pre">get_dis</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ball</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/base_ball.html#BaseBall.get_dis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.base_ball.BaseBall.get_dis" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Get the distance between the centers of the two balls</p>
+</dd>
+<dt>Parameters:</dt><dd><p>ball &lt;BaseBall&gt;: another ball</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.base_ball.BaseBall.judge_cover">
+<code class="sig-name descname"><span class="pre">judge_cover</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ball</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/base_ball.html#BaseBall.judge_cover"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.base_ball.BaseBall.judge_cover" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Determine whether the center of the two balls is covered</p>
+</dd>
+<dt>Parameters:</dt><dd><p>ball &lt;BaseBall&gt;: another ball</p>
+</dd>
+<dt>Returns:</dt><dd><p>is_covered &lt;bool&gt;: covered or not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.base_ball.BaseBall.judge_in_rectangle">
+<code class="sig-name descname"><span class="pre">judge_in_rectangle</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rectangle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/base_ball.html#BaseBall.judge_in_rectangle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.base_ball.BaseBall.judge_in_rectangle" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Determine if the ball and rectangle intersect</p>
+</dd>
+<dt>Parameters:</dt><dd><p>rectangle &lt;List&gt;: left_top_x, left_top_y, right_bottom_x, right_bottom_y</p>
+</dd>
+<dt>Returns:</dt><dd><p>&lt;bool&gt; : intersect or not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.base_ball.BaseBall.move">
+<code class="sig-name descname"><span class="pre">move</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/base_ball.html#BaseBall.move"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.base_ball.BaseBall.move" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Realize the movement of the ball, pass in the direction and time parameters, and return the new position</p>
+</dd>
+<dt>Parameters:</dt><dd><p>direction &lt;Vector2&gt;: A point in the unit circle
+duration &lt;float&gt;: time</p>
+</dd>
+<dt>Returns:</dt><dd><p>position &lt;Vector2&gt;: position after moving</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.base_ball.BaseBall.remove">
+<code class="sig-name descname"><span class="pre">remove</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/base_ball.html#BaseBall.remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.base_ball.BaseBall.remove" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Things to do when being removed from the map</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.base_ball.BaseBall.set_size">
+<code class="sig-name descname"><span class="pre">set_size</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="../_modules/gobigger/balls/base_ball.html#BaseBall.set_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.base_ball.BaseBall.set_size" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Set radius according to weight</p>
+</dd>
+<dt>Parameters:</dt><dd><p>size &lt;float&gt;: weight</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="foodball">
+<h2>FoodBall<a class="headerlink" href="#foodball" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gobigger.balls.food_ball.FoodBall">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">gobigger.balls.food_ball.</span></code><code class="sig-name descname"><span class="pre">FoodBall</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/food_ball.html#FoodBall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.food_ball.FoodBall" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><ul class="simple">
+<li><p>characteristic:</p></li>
+</ul>
+<ul class="simple">
+<li><p>Can’t move, can only be eaten, randomly generated</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gobigger.balls.food_ball.FoodBall.default_config">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">default_config</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/food_ball.html#FoodBall.default_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.food_ball.FoodBall.default_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Default config</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.food_ball.FoodBall.eat">
+<code class="sig-name descname"><span class="pre">eat</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ball</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/food_ball.html#FoodBall.eat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.food_ball.FoodBall.eat" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Describe the rules of eating and being eaten</p>
+</dd>
+<dt>Parameters:</dt><dd><p>ball &lt;BaseBall&gt;: Eaten ball</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.food_ball.FoodBall.move">
+<code class="sig-name descname"><span class="pre">move</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/food_ball.html#FoodBall.move"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.food_ball.FoodBall.move" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Realize the movement of the ball, pass in the direction and time parameters, and return the new position</p>
+</dd>
+<dt>Parameters:</dt><dd><p>direction &lt;Vector2&gt;: A point in the unit circle
+duration &lt;float&gt;: time</p>
+</dd>
+<dt>Returns:</dt><dd><p>position &lt;Vector2&gt;: position after moving</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="thornsball">
+<h2>ThornsBall<a class="headerlink" href="#thornsball" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gobigger.balls.thorns_ball.ThornsBall">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">gobigger.balls.thorns_ball.</span></code><code class="sig-name descname"><span class="pre">ThornsBall</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/thorns_ball.html#ThornsBall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.thorns_ball.ThornsBall" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><ul class="simple">
+<li><p>characteristic:</p></li>
+</ul>
+<ul class="simple">
+<li><p>Can’t move actively</p></li>
+<li><p>Can eat spores. When eating spores, it will inherit the momentum of the spores and move a certain distance.</p></li>
+<li><p>Can only be eaten by balls heavier than him. After eating, it will split the host into multiple smaller units.</p></li>
+<li><p>Nothing happens when a ball lighter than him passes by</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gobigger.balls.thorns_ball.ThornsBall.default_config">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">default_config</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/thorns_ball.html#ThornsBall.default_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.thorns_ball.ThornsBall.default_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Default config</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.thorns_ball.ThornsBall.eat">
+<code class="sig-name descname"><span class="pre">eat</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ball</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/thorns_ball.html#ThornsBall.eat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.thorns_ball.ThornsBall.eat" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Describe the rules of eating and being eaten</p>
+</dd>
+<dt>Parameters:</dt><dd><p>ball &lt;BaseBall&gt;: Eaten ball</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.thorns_ball.ThornsBall.move">
+<code class="sig-name descname"><span class="pre">move</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/thorns_ball.html#ThornsBall.move"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.thorns_ball.ThornsBall.move" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Realize the movement of the ball, pass in the direction and time parameters, and return the new position</p>
+</dd>
+<dt>Parameters:</dt><dd><p>direction &lt;Vector2&gt;: A point in the unit circle
+duration &lt;float&gt;: time</p>
+</dd>
+<dt>Returns:</dt><dd><p>position &lt;Vector2&gt;: position after moving</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="cloneball">
+<h2>CloneBall<a class="headerlink" href="#cloneball" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gobigger.balls.clone_ball.CloneBall">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">gobigger.balls.clone_ball.</span></code><code class="sig-name descname"><span class="pre">CloneBall</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">team_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel_last</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc_last</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_given_acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">owner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spore_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'radius_max':</span> <span class="pre">3,</span> <span class="pre">'radius_min':</span> <span class="pre">3,</span> <span class="pre">'spore_radius_init':</span> <span class="pre">20,</span> <span class="pre">'vel_init':</span> <span class="pre">50,</span> <span class="pre">'vel_zero_time':</span> <span class="pre">0.1}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/clone_ball.html#CloneBall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.clone_ball.CloneBall" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>One of the balls that a single player can control
+- characteristic:
+* Can move
+* Can eat any other ball smaller than itself
+* Under the control of the player, the movement can be stopped immediately and contracted towards the center of mass of the player
+* Skill 1: Split each unit into two equally
+* Skill 2: Spit spores forward
+* There is a percentage of weight attenuation, and the radius will shrink as the weight attenuates</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gobigger.balls.clone_ball.CloneBall.check_border">
+<code class="sig-name descname"><span class="pre">check_border</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/clone_ball.html#CloneBall.check_border"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.clone_ball.CloneBall.check_border" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Check if the position of the ball is beyond the bounds of the map</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.clone_ball.CloneBall.default_config">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">default_config</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/clone_ball.html#CloneBall.default_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.clone_ball.CloneBall.default_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Default config</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.clone_ball.CloneBall.eat">
+<code class="sig-name descname"><span class="pre">eat</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ball</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clone_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/clone_ball.html#CloneBall.eat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.clone_ball.CloneBall.eat" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Parameters:</dt><dd><p>clone_num &lt;int&gt;: The total number of balls for the current player</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.clone_ball.CloneBall.eject">
+<code class="sig-name descname"><span class="pre">eject</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/gobigger/balls/clone_ball.html#CloneBall.eject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.clone_ball.CloneBall.eject" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>When spit out spores, the spores spit out must be in the moving direction of the ball, and the position is tangent to the original ball after spitting out</p>
+</dd>
+<dt>Returns:</dt><dd><p>Return a list containing the spores spit out</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.clone_ball.CloneBall.judge_rigid">
+<code class="sig-name descname"><span class="pre">judge_rigid</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ball</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/clone_ball.html#CloneBall.judge_rigid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.clone_ball.CloneBall.judge_rigid" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Determine whether two balls will collide with a rigid body</p>
+</dd>
+<dt>Parameters:</dt><dd><p>ball &lt;CloneBall&gt;: another ball</p>
+</dd>
+<dt>Returns:</dt><dd><p>&lt;bool&gt;: collide or not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.clone_ball.CloneBall.move">
+<code class="sig-name descname"><span class="pre">move</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">given_acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">given_acc_center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/clone_ball.html#CloneBall.move"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.clone_ball.CloneBall.move" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Realize the movement of the ball, pass in the direction and time parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.clone_ball.CloneBall.on_thorns">
+<code class="sig-name descname"><span class="pre">on_thorns</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_num</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/gobigger/balls/clone_ball.html#CloneBall.on_thorns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.clone_ball.CloneBall.on_thorns" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Split after encountering thorns, calculate the size, position, speed, acceleration of each ball after splitting</p>
+</dd>
+<dt>Parameters:</dt><dd><p>split_num &lt;int&gt;: Number of splits added</p>
+</dd>
+<dt>Returns:</dt><dd><p>Return a list that contains the newly added balls after the split, the distribution of the split balls is a circle and the center of the circle has a ball</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.clone_ball.CloneBall.rigid_collision">
+<code class="sig-name descname"><span class="pre">rigid_collision</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ball</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/clone_ball.html#CloneBall.rigid_collision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.clone_ball.CloneBall.rigid_collision" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>When two balls collide, We need to determine whether the two balls belong to the same player
+A. If not, do nothing until one party is eaten at the end
+B. If the two balls are the same owner, judge whether the age of the two is full or not meet the fusion condition, if they are satisfied, do nothing.
+C. If the two balls are the same owner, judge whether the age of the two is full or not meet the fusion condition, Then the two balls will collide with rigid bodies
+This function completes the C part: the rigid body collision part, the logic is as follows:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>To determine the degree of fusion of the two balls, use [the radius of both] and subtract [the distance between the two] as the magnitude of the force</p></li>
+<li><p>Calculate the coefficient according to the weight, the larger the weight, the smaller the coefficient will be</p></li>
+<li><p>Correct the position of the two according to the coefficient and force</p></li>
+</ol>
+</div></blockquote>
+</dd>
+<dt>Parameters:</dt><dd><p>ball &lt;CloneBall&gt;: another ball</p>
+</dd>
+<dt>Returns:</dt><dd><p>state &lt;bool&gt;: the operation is successful or not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.clone_ball.CloneBall.size_decay">
+<code class="sig-name descname"><span class="pre">size_decay</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/clone_ball.html#CloneBall.size_decay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.clone_ball.CloneBall.size_decay" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview: </dt><dd><p>Control the size of the ball to decay over time</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.clone_ball.CloneBall.split">
+<code class="sig-name descname"><span class="pre">split</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clone_num</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/gobigger/balls/clone_ball.html#CloneBall.split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.clone_ball.CloneBall.split" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Active splitting, the two balls produced by splitting have the same volume, and their positions are tangent to the forward direction</p>
+</dd>
+<dt>Parameters:</dt><dd><p>clone_num &lt;int&gt;: The total number of balls for the current player</p>
+</dd>
+<dt>Returns:</dt><dd><p>The return value is the new ball after the split</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.clone_ball.CloneBall.stop">
+<code class="sig-name descname"><span class="pre">stop</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/clone_ball.html#CloneBall.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.clone_ball.CloneBall.stop" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Stop in place, the speed and acceleration become 0, and the direction points to the center of gravity of the shape surrounded by the centers of all spheres
+Acceleration is set to the opposite direction of speed
+stop_zero_time = 0.2
+stop_flag = True
+Judge stop_flag at the next move
+1. True: The direction must be the center of the circle, the acceleration and the upper limit of the speed are reduced
+2. False: Normal movement</p>
+</dd>
+<dt>Parameters:</dt><dd><p>direction &lt;Vector2&gt;: The direction of the speed after the stop</p>
+</dd>
+<dt>Returns:</dt><dd><p>state &lt;bool&gt;:  the operation is successful or not</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="sporeball">
+<h2>SporeBall<a class="headerlink" href="#sporeball" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gobigger.balls.spore_ball.SporeBall">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">gobigger.balls.spore_ball.</span></code><code class="sig-name descname"><span class="pre">SporeBall</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em>, <em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">border</span></em>, <em class="sig-param"><span class="pre">size=1</span></em>, <em class="sig-param"><span class="pre">vel=None</span></em>, <em class="sig-param"><span class="pre">acc=None</span></em>, <em class="sig-param"><span class="pre">direction=&lt;Vector2(0</span></em>, <em class="sig-param"><span class="pre">0)&gt;</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/spore_ball.html#SporeBall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.spore_ball.SporeBall" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Spores spit out by the player ball
+- characteristic:
+* Can’t move actively
+* can not eat
+* Can be eaten by CloneBall and ThornsBall
+* There is an initial velocity at birth, and it decays to 0 within a period of time</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gobigger.balls.spore_ball.SporeBall.default_config">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">default_config</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/spore_ball.html#SporeBall.default_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.spore_ball.SporeBall.default_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Default config</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.spore_ball.SporeBall.eat">
+<code class="sig-name descname"><span class="pre">eat</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ball</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/spore_ball.html#SporeBall.eat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.spore_ball.SporeBall.eat" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Describe the rules of eating and being eaten</p>
+</dd>
+<dt>Parameters:</dt><dd><p>ball &lt;BaseBall&gt;: Eaten ball</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.balls.spore_ball.SporeBall.move">
+<code class="sig-name descname"><span class="pre">move</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/balls/spore_ball.html#SporeBall.move"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.balls.spore_ball.SporeBall.move" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Realize the movement of the ball, pass in the direction and time parameters, and return the new position</p>
+</dd>
+<dt>Parameters:</dt><dd><p>direction &lt;Vector2&gt;: A point in the unit circle
+duration &lt;float&gt;: time</p>
+</dd>
+<dt>Returns:</dt><dd><p>position &lt;Vector2&gt;: position after moving</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="managers.html" class="btn btn-neutral float-right" title="managers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="agents.html" class="btn btn-neutral float-left" title="agents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, OpenDILab Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,541 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>gobigger.balls.clone_ball &mdash; gobigger 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> gobigger
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">Tutorial</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/index.html">API Doc</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq/index.html">FAQ</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">gobigger</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>gobigger.balls.clone_ball</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for gobigger.balls.clone_ball</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">easydict</span> <span class="kn">import</span> <span class="n">EasyDict</span>
+<span class="kn">from</span> <span class="nn">pygame.math</span> <span class="kn">import</span> <span class="n">Vector2</span>
+
+<span class="kn">from</span> <span class="nn">gobigger.utils</span> <span class="kn">import</span> <span class="n">format_vector</span><span class="p">,</span> <span class="n">add_size</span><span class="p">,</span> <span class="n">Border</span>
+<span class="kn">from</span> <span class="nn">.base_ball</span> <span class="kn">import</span> <span class="n">BaseBall</span>
+<span class="kn">from</span> <span class="nn">.food_ball</span> <span class="kn">import</span> <span class="n">FoodBall</span>
+<span class="kn">from</span> <span class="nn">.thorns_ball</span> <span class="kn">import</span> <span class="n">ThornsBall</span>
+<span class="kn">from</span> <span class="nn">.spore_ball</span> <span class="kn">import</span> <span class="n">SporeBall</span>
+
+
+<div class="viewcode-block" id="CloneBall"><a class="viewcode-back" href="../../../api_doc/balls.html#gobigger.balls.clone_ball.CloneBall">[docs]</a><span class="k">class</span> <span class="nc">CloneBall</span><span class="p">(</span><span class="n">BaseBall</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        One of the balls that a single player can control</span>
+<span class="sd">        - characteristic:</span>
+<span class="sd">        * Can move</span>
+<span class="sd">        * Can eat any other ball smaller than itself</span>
+<span class="sd">        * Under the control of the player, the movement can be stopped immediately and contracted towards the center of mass of the player</span>
+<span class="sd">        * Skill 1: Split each unit into two equally</span>
+<span class="sd">        * Skill 2: Spit spores forward</span>
+<span class="sd">        * There is a percentage of weight attenuation, and the radius will shrink as the weight attenuates</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CloneBall.default_config"><a class="viewcode-back" href="../../../api_doc/balls.html#gobigger.balls.clone_ball.CloneBall.default_config">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">default_config</span><span class="p">():</span>
+
+        <span class="n">cfg</span> <span class="o">=</span> <span class="n">BaseBall</span><span class="o">.</span><span class="n">default_config</span><span class="p">()</span>
+        <span class="n">cfg</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">acc_max</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="c1"># Maximum acceleration</span>
+            <span class="n">vel_max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="c1"># Maximum velocity</span>
+            <span class="n">radius_min</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="c1"># Minimum radius</span>
+            <span class="n">radius_max</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="c1"># Maximum radius</span>
+            <span class="n">radius_init</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="c1"># The initial radius of the player&#39;s ball</span>
+            <span class="n">part_num_max</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="c1"># Maximum number of avatars</span>
+            <span class="n">on_thorns_part_num</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="c1"># Maximum number of splits when encountering thorns</span>
+            <span class="n">on_thorns_part_radius_max</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="c1"># Maximum radius of split part when encountering thorns</span>
+            <span class="n">split_radius_min</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="c1"># The lower limit of the radius of the splittable ball</span>
+            <span class="n">eject_radius_min</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="c1"># The lower limit of the radius of the ball that can spores</span>
+            <span class="n">recombine_age</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="c1"># Time for the split ball to rejoin (s)</span>
+            <span class="n">split_vel_init</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="c1"># The initial velocity of the split ball</span>
+            <span class="n">split_vel_zero_time</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="c1"># The time it takes for the speed of the split ball to decay to zero (s)</span>
+            <span class="n">stop_zero_time</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="c1"># The time to zero the speed after using the stop function</span>
+            <span class="n">size_decay_rate</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="c1"># The size proportion of each state frame attenuation</span>
+            <span class="n">given_acc_weight</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="c1"># The ratio of actual acceleration to input acceleration</span>
+        <span class="p">))</span>
+        <span class="k">return</span> <span class="n">EasyDict</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">team_name</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">border</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">vel_last</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">acc_last</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">last_given_acc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stop_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                 <span class="n">owner</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spore_settings</span><span class="o">=</span><span class="n">SporeBall</span><span class="o">.</span><span class="n">default_config</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># init other kwargs</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="n">EasyDict</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="n">CloneBall</span><span class="o">.</span><span class="n">default_config</span><span class="p">()</span>
+        <span class="n">cfg</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CloneBall</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">border</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">vel</span><span class="o">=</span><span class="n">vel</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="n">acc</span><span class="p">,</span> <span class="o">**</span><span class="n">cfg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vel_max</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">vel_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acc_max</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">acc_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius_min</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">radius_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius_max</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">radius_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius_init</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">radius_init</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">part_num_max</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">part_num_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_thorns_part_num</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">on_thorns_part_num</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_thorns_part_radius_max</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">on_thorns_part_radius_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_radius_min</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">split_radius_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eject_radius_min</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">eject_radius_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recombine_age</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">recombine_age</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_vel_init</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">split_vel_init</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_vel_zero_time</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">split_vel_zero_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_zero_time</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">stop_zero_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size_decay_rate</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">size_decay_rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">given_acc_weight</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">given_acc_weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spore_settings</span> <span class="o">=</span> <span class="n">spore_settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg</span>
+        <span class="c1"># normal kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">team_name</span> <span class="o">=</span> <span class="n">team_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">owner</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_acc_init</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_vel_init</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_vel_zero_time</span> <span class="c1"># Initialized deceleration scalar after split</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># The time of the current ball from the last split</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vel_last</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">vel_last</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">vel_last</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acc_last</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">acc_last</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">acc_last</span> 
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vel_last</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cooling_last</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cooling_last</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;direction&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">vel</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">vel_last</span> <span class="o">+</span> <span class="n">Vector2</span><span class="p">(</span><span class="mf">0.00001</span><span class="p">,</span> <span class="mf">0.00001</span><span class="p">))</span><span class="o">.</span><span class="n">normalize</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_border</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_flag</span> <span class="o">=</span> <span class="n">stop_flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_given_acc</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">last_given_acc</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">last_given_acc</span>
+
+<div class="viewcode-block" id="CloneBall.move"><a class="viewcode-back" href="../../../api_doc/balls.html#gobigger.balls.clone_ball.CloneBall.move">[docs]</a>    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">given_acc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">given_acc_center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Realize the movement of the ball, pass in the direction and time parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">+=</span> <span class="n">duration</span>
+        <span class="k">if</span> <span class="n">given_acc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">given_acc</span> <span class="o">=</span> <span class="n">given_acc</span> <span class="k">if</span> <span class="n">given_acc</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">given_acc</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+            <span class="n">given_acc</span> <span class="o">*=</span> <span class="mi">10</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_given_acc</span> <span class="o">=</span> <span class="n">given_acc</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">given_acc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_given_acc</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_flag</span><span class="p">:</span> <span class="c1"># Stop function used</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;stop_time&#39;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stop_time</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">acc_stop</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_time</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_zero_time</span><span class="p">:</span> <span class="c1"># Deceleration state</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vel</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc_stop</span> <span class="o">*</span> <span class="n">duration</span> <span class="c1"># Acceleration is already in the opposite direction of speed</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vel_last</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc_last</span> <span class="o">*</span> <span class="n">duration</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stop_time</span> <span class="o">+=</span> <span class="n">duration</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_time</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_zero_time</span><span class="p">:</span> <span class="c1"># If the stop time is exceeded, set the speed and acceleration to 0 directly</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">vel</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">acc_stop</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">vel_last</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">acc_last</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vel</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">vel_last</span><span class="p">)</span> <span class="o">*</span> <span class="n">duration</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1"># Exceed the stop time, move closer to the center</span>
+                <span class="k">if</span> <span class="n">given_acc_center</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># Single ball</span>
+                    <span class="k">return</span>
+                <span class="k">else</span><span class="p">:</span> <span class="c1"># Multiple balls</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">=</span> <span class="n">format_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">+</span> <span class="n">given_acc</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc_max</span><span class="p">)</span>
+                    <span class="n">acc_tmp</span> <span class="o">=</span> <span class="n">format_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">+</span> <span class="n">given_acc_center</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc_max</span><span class="p">)</span> <span class="c1"># The acceleration towards the center of mass is handled separately</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">vel_max</span> <span class="o">=</span> <span class="mi">200</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">+</span><span class="mi">10</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">vel</span> <span class="o">=</span> <span class="n">format_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vel</span> <span class="o">*</span> <span class="mf">0.95</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">+</span> <span class="n">acc_tmp</span><span class="p">)</span> <span class="o">*</span> <span class="n">duration</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vel_max</span><span class="p">)</span> <span class="c1"># vel is multiplied by a number to prevent circling phenomenon</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">vel</span> <span class="o">*</span> <span class="n">duration</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1"># normal status</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">acc_stop</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">given_acc_center</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">given_acc_center</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">=</span> <span class="n">format_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">+</span> <span class="n">given_acc</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc_max</span><span class="p">)</span>
+            <span class="n">acc_tmp</span> <span class="o">=</span> <span class="n">format_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">+</span> <span class="n">given_acc_center</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc_max</span><span class="p">)</span> <span class="c1"># The acceleration towards the center of mass is handled separately</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vel_max</span> <span class="o">=</span> <span class="mi">200</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">+</span><span class="mi">10</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vel</span> <span class="o">=</span> <span class="n">format_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vel</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">+</span> <span class="n">acc_tmp</span><span class="p">)</span> <span class="o">*</span> <span class="n">duration</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vel_max</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling_last</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vel_last</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc_last</span> <span class="o">*</span> <span class="n">duration</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_vel_zero_time</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">vel_last</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">acc_last</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cooling_last</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vel</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">vel_last</span><span class="p">)</span> <span class="o">*</span> <span class="n">duration</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vel</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">vel_last</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vel</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">vel_last</span><span class="p">)</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_border</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="CloneBall.eat"><a class="viewcode-back" href="../../../api_doc/balls.html#gobigger.balls.clone_ball.CloneBall.eat">[docs]</a>    <span class="k">def</span> <span class="nf">eat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ball</span><span class="p">,</span> <span class="n">clone_num</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            clone_num &lt;int&gt;: The total number of balls for the current player</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ball</span><span class="p">,</span> <span class="n">SporeBall</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ball</span><span class="p">,</span> <span class="n">FoodBall</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ball</span><span class="p">,</span> <span class="n">CloneBall</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="n">add_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">ball</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_max</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_max</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ball</span><span class="p">,</span> <span class="n">ThornsBall</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="n">clone_num</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="n">add_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">ball</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">clone_num</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">part_num_max</span><span class="p">:</span>
+                <span class="n">split_num</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">part_num_max</span> <span class="o">-</span> <span class="n">clone_num</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_thorns_part_num</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_thorns</span><span class="p">(</span><span class="n">split_num</span><span class="o">=</span><span class="n">split_num</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;CloneBall can not eat </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">ball</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_border</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="CloneBall.on_thorns"><a class="viewcode-back" href="../../../api_doc/balls.html#gobigger.balls.clone_ball.CloneBall.on_thorns">[docs]</a>    <span class="k">def</span> <span class="nf">on_thorns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split_num</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Split after encountering thorns, calculate the size, position, speed, acceleration of each ball after splitting</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            split_num &lt;int&gt;: Number of splits added</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Return a list that contains the newly added balls after the split, the distribution of the split balls is a circle and the center of the circle has a ball</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># middle ball</span>
+        <span class="n">around_radius</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="p">(</span><span class="n">split_num</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_thorns_part_radius_max</span><span class="p">)</span>
+        <span class="n">around_size</span> <span class="o">=</span> <span class="n">around_radius</span> <span class="o">*</span> <span class="n">around_radius</span>
+        <span class="n">middle_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="n">around_size</span> <span class="o">*</span> <span class="n">split_num</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="n">middle_size</span><span class="p">)</span> 
+        <span class="n">middle_position</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">around_positions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">around_vels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">around_accs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">split_num</span><span class="p">):</span>
+            <span class="n">angle</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">split_num</span>
+            <span class="n">unit_x</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+            <span class="n">unit_y</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+            <span class="n">vel</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_vel_init</span><span class="o">*</span><span class="n">unit_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_vel_init</span><span class="o">*</span><span class="n">unit_y</span><span class="p">)</span>
+            <span class="n">acc</span> <span class="o">=</span> <span class="o">-</span> <span class="n">Vector2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_acc_init</span><span class="o">*</span><span class="n">unit_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_acc_init</span><span class="o">*</span><span class="n">unit_y</span><span class="p">)</span>
+            <span class="n">around_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+</span> <span class="n">Vector2</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">+</span><span class="n">around_radius</span><span class="p">)</span><span class="o">*</span><span class="n">unit_x</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">+</span><span class="n">around_radius</span><span class="p">)</span><span class="o">*</span><span class="n">unit_y</span><span class="p">)</span>
+            <span class="n">around_vels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vel</span><span class="p">)</span>
+            <span class="n">around_accs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>
+            <span class="n">around_positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">around_position</span><span class="p">)</span>
+        <span class="n">balls</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">around_positions</span><span class="p">,</span> <span class="n">around_vels</span><span class="p">,</span> <span class="n">around_accs</span><span class="p">):</span>
+            <span class="n">around_ball</span> <span class="o">=</span> <span class="n">CloneBall</span><span class="p">(</span><span class="n">team_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">team_name</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid1</span><span class="p">(),</span> <span class="n">position</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="p">,</span> 
+                                    <span class="n">size</span><span class="o">=</span><span class="n">around_size</span><span class="p">,</span> <span class="n">vel</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vel</span><span class="p">),</span> <span class="n">acc</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acc</span><span class="p">),</span>
+                                    <span class="n">vel_last</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">acc_last</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">last_given_acc</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_given_acc</span><span class="p">),</span> 
+                                    <span class="n">stop_flag</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stop_flag</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="p">,</span> <span class="n">spore_settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spore_settings</span><span class="p">,</span> 
+                                    <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">)</span>
+            <span class="n">balls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">around_ball</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">balls</span></div>
+
+<div class="viewcode-block" id="CloneBall.eject"><a class="viewcode-back" href="../../../api_doc/balls.html#gobigger.balls.clone_ball.CloneBall.eject">[docs]</a>    <span class="k">def</span> <span class="nf">eject</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            When spit out spores, the spores spit out must be in the moving direction of the ball, and the position is tangent to the original ball after spitting out</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Return a list containing the spores spit out</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eject_radius_min</span><span class="p">:</span>
+            <span class="n">spore_radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spore_settings</span><span class="o">.</span><span class="n">radius_min</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="n">spore_radius</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">direction_unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+</span> <span class="n">direction_unit</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">+</span> <span class="n">spore_radius</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">SporeBall</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid1</span><span class="p">(),</span> <span class="n">position</span><span class="o">=</span><span class="n">position</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction_unit</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">spore_settings</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="CloneBall.split"><a class="viewcode-back" href="../../../api_doc/balls.html#gobigger.balls.clone_ball.CloneBall.split">[docs]</a>    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clone_num</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Active splitting, the two balls produced by splitting have the same volume, and their positions are tangent to the forward direction</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            clone_num &lt;int&gt;: The total number of balls for the current player</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The return value is the new ball after the split</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_radius_min</span> <span class="ow">and</span> <span class="n">clone_num</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">part_num_max</span><span class="p">:</span>
+            <span class="n">split_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="n">split_size</span><span class="p">)</span>
+            <span class="n">clone_num</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">direction_unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+</span> <span class="n">direction_unit</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">vel_split</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_vel_init</span> <span class="o">*</span> <span class="n">direction_unit</span>
+            <span class="n">acc_split</span> <span class="o">=</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_acc_init</span> <span class="o">*</span> <span class="n">direction_unit</span>
+            <span class="k">return</span> <span class="n">CloneBall</span><span class="p">(</span><span class="n">team_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">team_name</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid1</span><span class="p">(),</span> <span class="n">position</span><span class="o">=</span><span class="n">position</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="p">,</span> 
+                             <span class="n">size</span><span class="o">=</span><span class="n">split_size</span><span class="p">,</span> <span class="n">vel</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vel</span><span class="p">),</span> <span class="n">acc</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acc</span><span class="p">),</span>
+                             <span class="n">vel_last</span><span class="o">=</span><span class="n">vel_split</span><span class="p">,</span> <span class="n">acc_last</span><span class="o">=</span><span class="n">acc_split</span><span class="p">,</span> <span class="n">last_given_acc</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_given_acc</span><span class="p">),</span>
+                             <span class="n">stop_flag</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stop_flag</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="p">,</span> <span class="n">spore_settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spore_settings</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="CloneBall.rigid_collision"><a class="viewcode-back" href="../../../api_doc/balls.html#gobigger.balls.clone_ball.CloneBall.rigid_collision">[docs]</a>    <span class="k">def</span> <span class="nf">rigid_collision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ball</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            When two balls collide, We need to determine whether the two balls belong to the same player</span>
+<span class="sd">            A. If not, do nothing until one party is eaten at the end</span>
+<span class="sd">            B. If the two balls are the same owner, judge whether the age of the two is full or not meet the fusion condition, if they are satisfied, do nothing.</span>
+<span class="sd">            C. If the two balls are the same owner, judge whether the age of the two is full or not meet the fusion condition, Then the two balls will collide with rigid bodies</span>
+<span class="sd">            This function completes the C part: the rigid body collision part, the logic is as follows:</span>
+<span class="sd">             1. To determine the degree of fusion of the two balls, use [the radius of both] and subtract [the distance between the two] as the magnitude of the force</span>
+<span class="sd">             2. Calculate the coefficient according to the weight, the larger the weight, the smaller the coefficient will be</span>
+<span class="sd">             3. Correct the position of the two according to the coefficient and force</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            ball &lt;CloneBall&gt;: another ball</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            state &lt;bool&gt;: the operation is successful or not</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">ball</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ball</span><span class="p">,</span> <span class="n">CloneBall</span><span class="p">),</span> <span class="s1">&#39;ball is not CloneBall but </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">ball</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span> <span class="o">==</span> <span class="n">ball</span><span class="o">.</span><span class="n">owner</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">recombine_age</span> <span class="ow">or</span> <span class="n">ball</span><span class="o">.</span><span class="n">age</span> <span class="o">&lt;</span> <span class="n">ball</span><span class="o">.</span><span class="n">recombine_age</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">ball</span><span class="o">.</span><span class="n">position</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">+</span> <span class="n">ball</span><span class="o">.</span><span class="n">radius</span> <span class="o">&gt;</span> <span class="n">d</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">+</span> <span class="n">ball</span><span class="o">.</span><span class="n">radius</span> <span class="o">-</span> <span class="n">d</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">+</span> <span class="n">ball</span><span class="o">.</span><span class="n">radius</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">d</span><span class="o">+</span><span class="mf">0.00001</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">-</span> <span class="n">f</span> <span class="o">*</span> <span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="n">ball</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="n">ball</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="n">ball</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">ball</span><span class="o">.</span><span class="n">position</span> <span class="o">+</span> <span class="n">f</span> <span class="o">*</span> <span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="n">ball</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_border</span><span class="p">()</span>
+        <span class="n">ball</span><span class="o">.</span><span class="n">check_border</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="CloneBall.stop"><a class="viewcode-back" href="../../../api_doc/balls.html#gobigger.balls.clone_ball.CloneBall.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Stop in place, the speed and acceleration become 0, and the direction points to the center of gravity of the shape surrounded by the centers of all spheres</span>
+<span class="sd">            Acceleration is set to the opposite direction of speed</span>
+<span class="sd">            stop_zero_time = 0.2</span>
+<span class="sd">            stop_flag = True</span>
+<span class="sd">            Judge stop_flag at the next move</span>
+<span class="sd">            1. True: The direction must be the center of the circle, the acceleration and the upper limit of the speed are reduced</span>
+<span class="sd">            2. False: Normal movement</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            direction &lt;Vector2&gt;: The direction of the speed after the stop</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            state &lt;bool&gt;:  the operation is successful or not</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_flag</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acc_stop</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_zero_time</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vel</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">vel_last</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span> <span class="k">if</span> <span class="n">direction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Vector2</span><span class="p">(</span><span class="mf">0.000001</span><span class="p">,</span> <span class="mf">0.000001</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_given_acc</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="CloneBall.judge_rigid"><a class="viewcode-back" href="../../../api_doc/balls.html#gobigger.balls.clone_ball.CloneBall.judge_rigid">[docs]</a>    <span class="k">def</span> <span class="nf">judge_rigid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ball</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Determine whether two balls will collide with a rigid body</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            ball &lt;CloneBall&gt;: another ball</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            &lt;bool&gt;: collide or not</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">recombine_age</span> <span class="ow">or</span> <span class="n">ball</span><span class="o">.</span><span class="n">age</span> <span class="o">&lt;</span> <span class="n">ball</span><span class="o">.</span><span class="n">recombine_age</span></div>
+
+<div class="viewcode-block" id="CloneBall.check_border"><a class="viewcode-back" href="../../../api_doc/balls.html#gobigger.balls.clone_ball.CloneBall.check_border">[docs]</a>    <span class="k">def</span> <span class="nf">check_border</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Check if the position of the ball is beyond the bounds of the map</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">minx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">maxx</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">minx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">maxx</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vel</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">acc</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">acc_last</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span> 
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">miny</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">maxy</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">miny</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">maxy</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vel</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">acc</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">acc_last</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span> </div>
+
+<div class="viewcode-block" id="CloneBall.size_decay"><a class="viewcode-back" href="../../../api_doc/balls.html#gobigger.balls.clone_ball.CloneBall.size_decay">[docs]</a>    <span class="k">def</span> <span class="nf">size_decay</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview: </span>
+<span class="sd">            Control the size of the ball to decay over time</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">size_decay_rate</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">, vel_last=</span><span class="si">{}</span><span class="s1">, acc_last=</span><span class="si">{}</span><span class="s1">, age=</span><span class="si">{:.3f}</span><span class="s1">, owner=</span><span class="si">{}</span><span class="s1">, direction=</span><span class="si">{}</span><span class="s1">, team_name=</span><span class="si">{}</span><span class="s1">&#39;</span>\
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">vel_last</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc_last</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">team_name</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, OpenDILab Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

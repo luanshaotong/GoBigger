@@ -1,0 +1,499 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>managers &mdash; gobigger 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="players" href="players.html" />
+    <link rel="prev" title="balls" href="balls.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> gobigger
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Tutorial</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Doc</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="agents.html">agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="balls.html">balls</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">managers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basemanager">BaseManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foodmanager">FoodManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thornsmanager">ThornsManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#playermanager">PlayerManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sporemanager">SporeManager</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="players.html">players</a></li>
+<li class="toctree-l2"><a class="reference internal" href="render.html">render</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server.html">server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">utils</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/index.html">FAQ</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">gobigger</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">API Doc</a> &raquo;</li>
+        
+      <li>managers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api_doc/managers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="managers">
+<h1>managers<a class="headerlink" href="#managers" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="basemanager">
+<h2>BaseManager<a class="headerlink" href="#basemanager" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gobigger.managers.base_manager.BaseManager">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">gobigger.managers.base_manager.</span></code><code class="sig-name descname"><span class="pre">BaseManager</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/base_manager.html#BaseManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.base_manager.BaseManager" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Base class for all ball managers</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gobigger.managers.base_manager.BaseManager.add_balls">
+<code class="sig-name descname"><span class="pre">add_balls</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">balls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/base_manager.html#BaseManager.add_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.base_manager.BaseManager.add_balls" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Add one (or more) balls</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.base_manager.BaseManager.get_balls">
+<code class="sig-name descname"><span class="pre">get_balls</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/base_manager.html#BaseManager.get_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.base_manager.BaseManager.get_balls" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Get all balls currently managed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.base_manager.BaseManager.obs">
+<code class="sig-name descname"><span class="pre">obs</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/base_manager.html#BaseManager.obs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.base_manager.BaseManager.obs" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Return data available for observation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.base_manager.BaseManager.refresh">
+<code class="sig-name descname"><span class="pre">refresh</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/base_manager.html#BaseManager.refresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.base_manager.BaseManager.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Refresh. Used to refresh the balls in management. Such as replenishing eaten food balls</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.base_manager.BaseManager.remove_balls">
+<code class="sig-name descname"><span class="pre">remove_balls</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">balls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/base_manager.html#BaseManager.remove_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.base_manager.BaseManager.remove_balls" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Remove managed balls</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.base_manager.BaseManager.step">
+<code class="sig-name descname"><span class="pre">step</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/base_manager.html#BaseManager.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.base_manager.BaseManager.step" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Perform a status update under the control of the server</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="foodmanager">
+<h2>FoodManager<a class="headerlink" href="#foodmanager" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gobigger.managers.food_manager.FoodManager">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">gobigger.managers.food_manager.</span></code><code class="sig-name descname"><span class="pre">FoodManager</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/food_manager.html#FoodManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.food_manager.FoodManager" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="gobigger.managers.food_manager.FoodManager.add_balls">
+<code class="sig-name descname"><span class="pre">add_balls</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">balls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/food_manager.html#FoodManager.add_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.food_manager.FoodManager.add_balls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Add one (or more) balls</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.food_manager.FoodManager.get_balls">
+<code class="sig-name descname"><span class="pre">get_balls</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/food_manager.html#FoodManager.get_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.food_manager.FoodManager.get_balls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Get all balls currently managed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.food_manager.FoodManager.refresh">
+<code class="sig-name descname"><span class="pre">refresh</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/food_manager.html#FoodManager.refresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.food_manager.FoodManager.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Refresh. Used to refresh the balls in management. Such as replenishing eaten food balls</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.food_manager.FoodManager.remove_balls">
+<code class="sig-name descname"><span class="pre">remove_balls</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">balls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/food_manager.html#FoodManager.remove_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.food_manager.FoodManager.remove_balls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Remove managed balls</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.food_manager.FoodManager.step">
+<code class="sig-name descname"><span class="pre">step</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/food_manager.html#FoodManager.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.food_manager.FoodManager.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Perform a status update under the control of the server</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="thornsmanager">
+<h2>ThornsManager<a class="headerlink" href="#thornsmanager" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gobigger.managers.thorns_manager.ThornsManager">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">gobigger.managers.thorns_manager.</span></code><code class="sig-name descname"><span class="pre">ThornsManager</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/thorns_manager.html#ThornsManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.thorns_manager.ThornsManager" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="gobigger.managers.thorns_manager.ThornsManager.add_balls">
+<code class="sig-name descname"><span class="pre">add_balls</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">balls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/thorns_manager.html#ThornsManager.add_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.thorns_manager.ThornsManager.add_balls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Add one (or more) balls</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.thorns_manager.ThornsManager.get_balls">
+<code class="sig-name descname"><span class="pre">get_balls</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/thorns_manager.html#ThornsManager.get_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.thorns_manager.ThornsManager.get_balls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Get all balls currently managed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.thorns_manager.ThornsManager.refresh">
+<code class="sig-name descname"><span class="pre">refresh</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/thorns_manager.html#ThornsManager.refresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.thorns_manager.ThornsManager.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Refresh. Used to refresh the balls in management. Such as replenishing eaten food balls</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.thorns_manager.ThornsManager.remove_balls">
+<code class="sig-name descname"><span class="pre">remove_balls</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">balls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/thorns_manager.html#ThornsManager.remove_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.thorns_manager.ThornsManager.remove_balls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Remove managed balls</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.thorns_manager.ThornsManager.step">
+<code class="sig-name descname"><span class="pre">step</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/thorns_manager.html#ThornsManager.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.thorns_manager.ThornsManager.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Perform a status update under the control of the server</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="playermanager">
+<h2>PlayerManager<a class="headerlink" href="#playermanager" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gobigger.managers.player_manager.PlayerManager">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">gobigger.managers.player_manager.</span></code><code class="sig-name descname"><span class="pre">PlayerManager</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">team_num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">player_num_per_team</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spore_manager_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/player_manager.html#PlayerManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.player_manager.PlayerManager" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="gobigger.managers.player_manager.PlayerManager.add_balls">
+<code class="sig-name descname"><span class="pre">add_balls</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">balls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/player_manager.html#PlayerManager.add_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.player_manager.PlayerManager.add_balls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Add one (or more) balls</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.player_manager.PlayerManager.adjust">
+<code class="sig-name descname"><span class="pre">adjust</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/player_manager.html#PlayerManager.adjust"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.player_manager.PlayerManager.adjust" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Adjust all balls in all players</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.player_manager.PlayerManager.get_balls">
+<code class="sig-name descname"><span class="pre">get_balls</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/player_manager.html#PlayerManager.get_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.player_manager.PlayerManager.get_balls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Get all balls currently managed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.player_manager.PlayerManager.get_player_names">
+<code class="sig-name descname"><span class="pre">get_player_names</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/player_manager.html#PlayerManager.get_player_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.player_manager.PlayerManager.get_player_names" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>get all names of players</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.player_manager.PlayerManager.get_player_names_with_team">
+<code class="sig-name descname"><span class="pre">get_player_names_with_team</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/player_manager.html#PlayerManager.get_player_names_with_team"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.player_manager.PlayerManager.get_player_names_with_team" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>get all names of players by teams</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.player_manager.PlayerManager.get_team_names">
+<code class="sig-name descname"><span class="pre">get_team_names</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/player_manager.html#PlayerManager.get_team_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.player_manager.PlayerManager.get_team_names" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>get all names of players by teams with team names</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.player_manager.PlayerManager.remove_balls">
+<code class="sig-name descname"><span class="pre">remove_balls</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">balls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/player_manager.html#PlayerManager.remove_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.player_manager.PlayerManager.remove_balls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Remove managed balls</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.player_manager.PlayerManager.reset">
+<code class="sig-name descname"><span class="pre">reset</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/player_manager.html#PlayerManager.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.player_manager.PlayerManager.reset" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>reset manager</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.player_manager.PlayerManager.step">
+<code class="sig-name descname"><span class="pre">step</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/player_manager.html#PlayerManager.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.player_manager.PlayerManager.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Perform a status update under the control of the server</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="sporemanager">
+<h2>SporeManager<a class="headerlink" href="#sporemanager" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gobigger.managers.spore_manager.SporeManager">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">gobigger.managers.spore_manager.</span></code><code class="sig-name descname"><span class="pre">SporeManager</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/spore_manager.html#SporeManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.spore_manager.SporeManager" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="gobigger.managers.spore_manager.SporeManager.add_balls">
+<code class="sig-name descname"><span class="pre">add_balls</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">balls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/spore_manager.html#SporeManager.add_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.spore_manager.SporeManager.add_balls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Add one (or more) balls</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.spore_manager.SporeManager.get_balls">
+<code class="sig-name descname"><span class="pre">get_balls</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/spore_manager.html#SporeManager.get_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.spore_manager.SporeManager.get_balls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Get all balls currently managed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.spore_manager.SporeManager.remove_balls">
+<code class="sig-name descname"><span class="pre">remove_balls</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">balls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/spore_manager.html#SporeManager.remove_balls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.spore_manager.SporeManager.remove_balls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Remove managed balls</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gobigger.managers.spore_manager.SporeManager.step">
+<code class="sig-name descname"><span class="pre">step</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gobigger/managers/spore_manager.html#SporeManager.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gobigger.managers.spore_manager.SporeManager.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview:
+Perform a status update under the control of the server</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="players.html" class="btn btn-neutral float-right" title="players" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="balls.html" class="btn btn-neutral float-left" title="balls" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, OpenDILab Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

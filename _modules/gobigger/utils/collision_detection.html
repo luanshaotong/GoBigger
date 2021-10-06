@@ -1,0 +1,437 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>gobigger.utils.collision_detection &mdash; gobigger 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> gobigger
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">Tutorial</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/index.html">API Doc</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq/index.html">FAQ</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">gobigger</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>gobigger.utils.collision_detection</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for gobigger.utils.collision_detection</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">.structures</span> <span class="kn">import</span> <span class="n">Border</span><span class="p">,</span> <span class="n">QuadNode</span>
+
+
+<div class="viewcode-block" id="BaseCollisionDetection"><a class="viewcode-back" href="../../../api_doc/utils.html#gobigger.utils.collision_detection.BaseCollisionDetection">[docs]</a><span class="k">class</span> <span class="nc">BaseCollisionDetection</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">border</span><span class="p">:</span> <span class="n">Border</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">border</span> <span class="o">=</span> <span class="n">border</span>
+
+    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">gallery_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="ExhaustiveCollisionDetection"><a class="viewcode-back" href="../../../api_doc/utils.html#gobigger.utils.collision_detection.ExhaustiveCollisionDetection">[docs]</a><span class="k">class</span> <span class="nc">ExhaustiveCollisionDetection</span><span class="p">(</span><span class="n">BaseCollisionDetection</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Exhaustive Algorithm</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">border</span><span class="p">:</span> <span class="n">Border</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ExhaustiveCollisionDetection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">border</span><span class="o">=</span><span class="n">border</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ExhaustiveCollisionDetection.solve"><a class="viewcode-back" href="../../../api_doc/utils.html#gobigger.utils.collision_detection.ExhaustiveCollisionDetection.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">gallery_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            For the balls in the query, enumerate each ball in the gallery to determine whether there is a collision</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            query_list &lt;List[BaseBall]&gt;: List of balls that need to be queried for collision</span>
+<span class="sd">            gallery_list &lt;List[BaseBall]&gt;: List of all balls</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            results &lt;Dict[int: List[BaseBall]&gt; return value</span>
+<span class="sd">                int value denotes:</span>
+<span class="sd">                    the subscript in query_list</span>
+<span class="sd">                string value denotes:</span>
+<span class="sd">                    List of balls that collided with the query corresponding to the subscript</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">query_list</span><span class="p">):</span>
+            <span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gallery_list</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">judge_cover</span><span class="p">(</span><span class="n">g</span><span class="p">):</span> 
+                    <span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">results</span></div></div>
+
+
+<div class="viewcode-block" id="PrecisionCollisionDetection"><a class="viewcode-back" href="../../../api_doc/utils.html#gobigger.utils.collision_detection.PrecisionCollisionDetection">[docs]</a><span class="k">class</span> <span class="nc">PrecisionCollisionDetection</span><span class="p">(</span><span class="n">BaseCollisionDetection</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Precision Approximation Algorithm</span>
+<span class="sd">        Divide the map into several rows according to the accuracy that has been set, dynamically maintain the row information in each frame, and search by row</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">border</span><span class="p">:</span> <span class="n">Border</span><span class="p">,</span> <span class="n">precision</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Parameter:</span>
+<span class="sd">            precision &lt;int&gt;: the precision of dividing rows</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PrecisionCollisionDetection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">border</span> <span class="o">=</span> <span class="n">border</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="n">precision</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">row_vector</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precision</span><span class="p">)]</span>
+
+<div class="viewcode-block" id="PrecisionCollisionDetection.get_row"><a class="viewcode-back" href="../../../api_doc/utils.html#gobigger.utils.collision_detection.PrecisionCollisionDetection.get_row">[docs]</a>    <span class="k">def</span> <span class="nf">get_row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Get the row coordinates of the ball</span>
+<span class="sd">        Parameter:</span>
+<span class="sd">            node &lt;BaseBall&gt;: The ball need to get its row coordinates</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">minx</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">maxx</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">minx</span><span class="p">)</span>
+        <span class="n">row_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">precision</span>
+        <span class="n">row_id</span> <span class="o">=</span> <span class="nb">int</span> <span class="p">(</span><span class="n">x</span> <span class="o">//</span> <span class="n">row_height</span><span class="p">)</span>
+        <span class="n">row_id</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_id</span><span class="p">)</span>
+        <span class="n">row_id</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">row_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">precision</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">row_id</span></div>
+
+
+<div class="viewcode-block" id="PrecisionCollisionDetection.dichotomous_jump"><a class="viewcode-back" href="../../../api_doc/utils.html#gobigger.utils.collision_detection.PrecisionCollisionDetection.dichotomous_jump">[docs]</a>    <span class="k">def</span> <span class="nf">dichotomous_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">row_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Dichotomous algorithm</span>
+<span class="sd">        Parameter:</span>
+<span class="sd">            value &lt;double&gt; : Threshold</span>
+<span class="sd">            row_id &lt;int&gt; : The id of the row being operated on</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">row_vector</span><span class="p">[</span><span class="n">row_id</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">:</span>
+            <span class="n">mid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">row_vector</span><span class="p">[</span><span class="n">row_id</span><span class="p">][</span><span class="n">mid</span><span class="p">]</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="n">mid</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">pos</span></div>
+
+<div class="viewcode-block" id="PrecisionCollisionDetection.solve"><a class="viewcode-back" href="../../../api_doc/utils.html#gobigger.utils.collision_detection.PrecisionCollisionDetection.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">gallery_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            First, you need to sort the balls in each row according to the ordinate. For the balls in query_list, first abstract the boundary of the ball into a rectangle, then traverse each row in the rectangle, and find the first ball covered by the query through dichotomy in each row, and then Enumerate the balls in sequence until the ordinate exceeds the boundary of the query rectangle</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            query_list &lt;List[BaseBall]&gt;: List of balls that need to be queried for collision</span>
+<span class="sd">            gallery_list &lt;List[BaseBall]&gt;: List of all balls</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            results &lt;Dict[int: List[BaseBall]&gt; return value</span>
+<span class="sd">                int value denotes:</span>
+<span class="sd">                    the subscript in query_list</span>
+<span class="sd">                string value denotes:</span>
+<span class="sd">                    List of balls that collided with the query corresponding to the subscript</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precision</span><span class="p">):</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">row_vector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">gallery_list</span><span class="p">:</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">row_vector</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_row</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">precision</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">row_vector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">base_ball</span><span class="p">:</span> <span class="n">base_ball</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">query</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">query_list</span><span class="p">):</span>
+            <span class="n">results</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">query</span><span class="o">.</span><span class="n">radius</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">query</span><span class="o">.</span><span class="n">radius</span>
+            <span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_row</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">query</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+            <span class="n">bottom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_row</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">query</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">start_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dichotomous_jump</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">start_pos</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_pos</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">row_vector</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">row_vector</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">right</span><span class="p">:</span> <span class="k">break</span>
+                        <span class="n">is_covered</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">judge_cover</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">row_vector</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="n">is_covered</span><span class="p">:</span> 
+                            <span class="n">results</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">row_vector</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">results</span></div></div>
+
+
+<div class="viewcode-block" id="RebuildQuadTreeCollisionDetection"><a class="viewcode-back" href="../../../api_doc/utils.html#gobigger.utils.collision_detection.RebuildQuadTreeCollisionDetection">[docs]</a><span class="k">class</span> <span class="nc">RebuildQuadTreeCollisionDetection</span><span class="p">(</span><span class="n">BaseCollisionDetection</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Build a quadtree on a two-dimensional plane in every frame, and query collisions in the quadtree</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">border</span><span class="p">:</span> <span class="n">Border</span><span class="p">,</span> <span class="n">node_capacity</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span> <span class="n">tree_depth</span> <span class="o">=</span> <span class="mi">32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Parameter:</span>
+<span class="sd">            node_capacity &lt;int&gt;: The capacity of each point in the quadtree</span>
+<span class="sd">            tree_depth &lt;int&gt;: The max depth of the quadtree</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RebuildQuadTreeCollisionDetection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">border</span> <span class="o">=</span> <span class="n">border</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_capacity</span> <span class="o">=</span> <span class="n">node_capacity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree_depth</span> <span class="o">=</span> <span class="n">tree_depth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">border</span> <span class="o">=</span> <span class="n">border</span>
+    
+<div class="viewcode-block" id="RebuildQuadTreeCollisionDetection.solve"><a class="viewcode-back" href="../../../api_doc/utils.html#gobigger.utils.collision_detection.RebuildQuadTreeCollisionDetection.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">gallery_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">           Construct a quadtree from scratch based on gallery_list and complete the query</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            query_list &lt;List[BaseBall]&gt;: List of balls that need to be queried for collision</span>
+<span class="sd">            gallery_list &lt;List[BaseBall]&gt;: List of all balls</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            results &lt;Dict[int: List[BaseBall]&gt; return value</span>
+<span class="sd">                int value denotes:</span>
+<span class="sd">                    the subscript in query_list</span>
+<span class="sd">                string value denotes:</span>
+<span class="sd">                    List of balls that collided with the query corresponding to the subscript</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">quadTree</span> <span class="o">=</span> <span class="n">QuadNode</span><span class="p">(</span><span class="n">border</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="p">,</span> <span class="n">max_depth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree_depth</span><span class="p">,</span> <span class="n">max_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_capacity</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">gallery_list</span><span class="p">:</span>
+            <span class="n">quadTree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">query</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">query_list</span><span class="p">):</span>
+            <span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">quadTree_results</span> <span class="o">=</span> <span class="n">quadTree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">Border</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">query</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">minx</span><span class="p">),</span> 
+                                                    <span class="nb">max</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">query</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">miny</span><span class="p">),</span> 
+                                                    <span class="nb">min</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">query</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">maxx</span><span class="p">),</span>
+                                                    <span class="nb">min</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">query</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">maxy</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">quadTree_results</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">query</span><span class="o">.</span><span class="n">judge_cover</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+                    <span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">results</span></div></div>
+
+
+<div class="viewcode-block" id="RemoveQuadTreeCollisionDetection"><a class="viewcode-back" href="../../../api_doc/utils.html#gobigger.utils.collision_detection.RemoveQuadTreeCollisionDetection">[docs]</a><span class="k">class</span> <span class="nc">RemoveQuadTreeCollisionDetection</span><span class="p">(</span><span class="n">BaseCollisionDetection</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Add delete operations for the quadtree, and dynamically maintain a quadtree</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">border</span><span class="p">:</span> <span class="n">Border</span><span class="p">,</span> <span class="n">node_capacity</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span> <span class="n">tree_depth</span> <span class="o">=</span> <span class="mi">32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Parameter:</span>
+<span class="sd">            node_capacity &lt;int&gt;: The capacity of each point in the quadtree</span>
+<span class="sd">            tree_depth &lt;int&gt;: The max depth of the quadtree</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RemoveQuadTreeCollisionDetection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">border</span> <span class="o">=</span> <span class="n">border</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_capacity</span> <span class="o">=</span> <span class="n">node_capacity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree_depth</span> <span class="o">=</span> <span class="n">tree_depth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">border</span> <span class="o">=</span> <span class="n">border</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">quadTree</span> <span class="o">=</span> <span class="n">QuadNode</span><span class="p">(</span><span class="n">border</span> <span class="o">=</span> <span class="n">border</span><span class="p">,</span> <span class="n">max_depth</span> <span class="o">=</span> <span class="n">tree_depth</span><span class="p">,</span> <span class="n">max_num</span> <span class="o">=</span> <span class="n">node_capacity</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="RemoveQuadTreeCollisionDetection.solve"><a class="viewcode-back" href="../../../api_doc/utils.html#gobigger.utils.collision_detection.RemoveQuadTreeCollisionDetection.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">changed_node_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">           Update the points in the quadtree according to the changed_node_list and complete the query</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            query_list &lt;List[BaseBall]&gt;: List of balls that need to be queried for collision</span>
+<span class="sd">            gallery_list &lt;List[BaseBall]&gt;: List of all balls</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            results &lt;Dict[int: List[BaseBall]&gt; return value</span>
+<span class="sd">                int value denotes:</span>
+<span class="sd">                    the subscript in query_list</span>
+<span class="sd">                string value denotes:</span>
+<span class="sd">                    List of balls that collided with the query corresponding to the subscript</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">changed_node_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">node</span><span class="o">.</span><span class="n">quad_node</span> <span class="o">==</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">quad_node</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">node</span><span class="o">.</span><span class="n">is_remove</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadTree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">query</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">query_list</span><span class="p">):</span>
+            <span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">quadTree_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadTree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">Border</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">query</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">minx</span><span class="p">),</span> 
+                                                    <span class="nb">max</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">query</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">miny</span><span class="p">),</span> 
+                                                    <span class="nb">min</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">query</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">maxx</span><span class="p">),</span>
+                                                    <span class="nb">min</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">query</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="o">.</span><span class="n">maxy</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">quadTree_results</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">query</span><span class="o">.</span><span class="n">judge_cover</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+                    <span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">results</span></div></div>
+
+<span class="k">def</span> <span class="nf">create_collision_detection</span><span class="p">(</span><span class="n">cd_type</span><span class="p">,</span> <span class="o">**</span><span class="n">cd_kwargs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">cd_type</span> <span class="o">==</span> <span class="s1">&#39;exhaustive&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExhaustiveCollisionDetection</span><span class="p">(</span><span class="o">**</span><span class="n">cd_kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cd_type</span> <span class="o">==</span> <span class="s1">&#39;precision&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">PrecisionCollisionDetection</span><span class="p">(</span><span class="o">**</span><span class="n">cd_kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cd_type</span> <span class="o">==</span> <span class="s1">&#39;rebuild_quadtree&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">RebuildQuadTreeCollisionDetection</span><span class="p">(</span><span class="o">**</span><span class="n">cd_kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cd_type</span> <span class="o">==</span> <span class="s1">&#39;remove_quadtree&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">RemoveQuadTreeCollisionDetection</span><span class="p">(</span><span class="o">**</span><span class="n">cd_kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, OpenDILab Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

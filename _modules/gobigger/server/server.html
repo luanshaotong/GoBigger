@@ -1,0 +1,584 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>gobigger.server.server &mdash; gobigger 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> gobigger
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">Tutorial</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/index.html">API Doc</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq/index.html">FAQ</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">gobigger</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>gobigger.server.server</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for gobigger.server.server</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">easydict</span> <span class="kn">import</span> <span class="n">EasyDict</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PYGAME_HIDE_SUPPORT_PROMPT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;hide&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;SDL_AUDIODRIVER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;dsp&#39;</span>
+
+<span class="kn">from</span> <span class="nn">pygame.math</span> <span class="kn">import</span> <span class="n">Vector2</span>
+
+<span class="kn">from</span> <span class="nn">gobigger.utils</span> <span class="kn">import</span> <span class="n">Border</span><span class="p">,</span> <span class="n">create_collision_detection</span>
+<span class="kn">from</span> <span class="nn">gobigger.balls</span> <span class="kn">import</span> <span class="n">FoodBall</span><span class="p">,</span> <span class="n">ThornsBall</span><span class="p">,</span> <span class="n">CloneBall</span><span class="p">,</span> <span class="n">SporeBall</span>
+<span class="kn">from</span> <span class="nn">gobigger.managers</span> <span class="kn">import</span> <span class="n">FoodManager</span><span class="p">,</span> <span class="n">SporeManager</span><span class="p">,</span> <span class="n">ThornsManager</span><span class="p">,</span> <span class="n">PlayerManager</span>
+
+
+<div class="viewcode-block" id="Server"><a class="viewcode-back" href="../../../api_doc/server.html#gobigger.server.server.Server">[docs]</a><span class="k">class</span> <span class="nc">Server</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Server is responsible for the management of the entire game environment, including the status of all balls in the environment, and the status update after the action is entered</span>
+<span class="sd">        The main logic when updating is as follows:</span>
+<span class="sd">        0 tick -&gt; input action -&gt; update the state of the player&#39;s ball -&gt; update the state of all balls after the current state continues for 1 tick</span>
+<span class="sd">            -&gt; detect collision and eating (update status) -&gt; 0 tick end/1 tick start</span>
+<span class="sd">        The details are as follows:</span>
+<span class="sd">        1. Generate all balls (food, thorns, players)</span>
+<span class="sd">        2. Single step</span>
+<span class="sd">            1. Modify the current state of all players&#39; balls according to the action (including acceleration, instantaneous state after splitting/spitting)</span>
+<span class="sd">            2. Continue a tick for the current state of all balls, that is, update the acceleration/velocity/position of each ball after a tick, and at the same time the ball that is in the moving state in this tick</span>
+<span class="sd">            3. Adjust all balls in each player (rigid body collision + ball-ball fusion)</span>
+<span class="sd">            4. For each ball moved in this tick (already sorted by priority):</span>
+<span class="sd">                1. We will know which balls he collided with (there will be repetitions)</span>
+<span class="sd">                2. Category discussion</span>
+<span class="sd">                    1. One of the balls is the player ball</span>
+<span class="sd">                        1. Another is another player&#39;s ball, the bigger one eats the smaller one</span>
+<span class="sd">                        2. The other side is your own clone, in fact, you don’t need to deal with it if you have already dealt with it before.</span>
+<span class="sd">                        3. Another is food/spores, player ball eat it</span>
+<span class="sd">                        4. Another is the thornball</span>
+<span class="sd">                            1. Do not touch the center of the circle, continue</span>
+<span class="sd">                            2. Hit the center of the circle</span>
+<span class="sd">                                1. player ball is older than thornball</span>
+<span class="sd">                                    1. number of player&#39;s avatar reaches the upper limit, thornball will be eaten</span>
+<span class="sd">                                    2. number of player&#39;s avatar doesn&#39;t reache the upper limit, player ball eat thornball and blow up</span>
+<span class="sd">                                2. player ball is younger than thornball, nothing happened</span>
+<span class="sd">                    2. One of the balls is a thornball</span>
+<span class="sd">                        1. Another is the player ball</span>
+<span class="sd">                            1. hit the center of a circle</span>
+<span class="sd">                                1. player ball is older than thornball</span>
+<span class="sd">                                    1. number of player&#39;s avatar reaches the upper limit, thornball will be eaten</span>
+<span class="sd">                                    2. number of player&#39;s avatar doesn&#39;t reache the upper limit, player ball eat thornball and blow up</span>
+<span class="sd">                                2. player ball is younger than thornball, nothing happened</span>
+<span class="sd">                            2. Do not touch the center of the circle, continue,</span>
+<span class="sd">                        2. The another is the spore, thornball eat it and add a speed and acceleration</span>
+<span class="sd">                    3. One of the balls is Spore</span>
+<span class="sd">                        1. Another is the player ball, Spore was eaten</span>
+<span class="sd">                        2. Another is the thorn ball, Spore was eaten</span>
+<span class="sd">        3. After each tick, check if you want to update food, thorns, and player rebirth</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">default_config</span><span class="p">():</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">version</span><span class="o">=</span><span class="s1">&#39;0.1&#39;</span><span class="p">,</span>
+            <span class="n">team_num</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> 
+            <span class="n">player_num_per_team</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+            <span class="n">map_width</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+            <span class="n">map_height</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> 
+            <span class="n">match_time</span><span class="o">=</span><span class="mi">60</span><span class="o">*</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">state_tick_per_second</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="c1"># frame</span>
+            <span class="n">action_tick_per_second</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="c1"># frame</span>
+            <span class="n">collision_detection_type</span><span class="o">=</span><span class="s1">&#39;precision&#39;</span><span class="p">,</span> 
+            <span class="n">manager_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="c1"># food setting</span>
+                <span class="n">food_manager</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">num_init</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="c1"># initial number</span>
+                    <span class="n">num_min</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="c1"># Minimum number</span>
+                    <span class="n">num_max</span><span class="o">=</span><span class="mi">2500</span><span class="p">,</span> <span class="c1"># Maximum number</span>
+                    <span class="n">refresh_time</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="c1"># Time interval (seconds) for refreshing food in the map</span>
+                    <span class="n">refresh_num</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="c1"># The number of refreshed foods in the map each time</span>
+                    <span class="n">ball_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span> <span class="c1"># The specific parameter description can be viewed in the ball module</span>
+                        <span class="n">radius_min</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
+                        <span class="n">radius_max</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">),</span>
+                <span class="c1"># thorns setting</span>
+                <span class="n">thorns_manager</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">num_init</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="c1"># initial number</span>
+                    <span class="n">num_min</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="c1"># Minimum number</span>
+                    <span class="n">num_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="c1"># Maximum number</span>
+                    <span class="n">refresh_time</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="c1"># Time interval (seconds) for refreshing thorns in the map</span>
+                    <span class="n">refresh_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="c1"># The number of refreshed  thorns in the map each time</span>
+                    <span class="n">ball_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span> <span class="c1"># The specific parameter description can be viewed in the ball module</span>
+                        <span class="n">radius_min</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> 
+                        <span class="n">radius_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> 
+                        <span class="n">vel_max</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                        <span class="n">eat_spore_vel_init</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> 
+                        <span class="n">eat_spore_vel_zero_time</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">),</span>
+                <span class="c1"># player setting</span>
+                <span class="n">player_manager</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">ball_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>  <span class="c1"># The specific parameter description can be viewed in the ball module</span>
+                        <span class="n">acc_max</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> 
+                        <span class="n">vel_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                        <span class="n">radius_min</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+                        <span class="n">radius_max</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> 
+                        <span class="n">radius_init</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+                        <span class="n">part_num_max</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> 
+                        <span class="n">on_thorns_part_num</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> 
+                        <span class="n">on_thorns_part_radius_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                        <span class="n">split_radius_min</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> 
+                        <span class="n">eject_radius_min</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> 
+                        <span class="n">recombine_age</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                        <span class="n">split_vel_init</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                        <span class="n">split_vel_zero_time</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+                        <span class="n">stop_zero_time</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">size_decay_rate</span><span class="o">=</span><span class="mf">0.00005</span><span class="p">,</span> 
+                        <span class="n">given_acc_weight</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">),</span>
+                <span class="c1"># spore setting</span>
+                <span class="n">spore_manager</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">ball_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span> <span class="c1"># The specific parameter description can be viewed in the ball module</span>
+                        <span class="n">radius_min</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+                        <span class="n">radius_max</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+                        <span class="n">vel_init</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span>
+                        <span class="n">vel_zero_time</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> 
+                        <span class="n">spore_radius_init</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> 
+                    <span class="p">)</span>
+                <span class="p">)</span>   
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">EasyDict</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">Server</span><span class="o">.</span><span class="n">default_config</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">cfg</span> <span class="o">=</span> <span class="n">EasyDict</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">team_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">team_num</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_num_per_team</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">player_num_per_team</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">map_width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">map_height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">match_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">match_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_tick_per_second</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">state_tick_per_second</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_tick_per_second</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">action_tick_per_second</span>
+        <span class="c1"># other kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_tick_duration</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_tick_per_second</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_tick_duration</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_tick_per_second</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_tick_per_action_tick</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_tick_per_second</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_tick_per_second</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">border</span> <span class="o">=</span> <span class="n">Border</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_height</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screens_all</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screens_partial</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">food_manager</span> <span class="o">=</span> <span class="n">FoodManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">manager_settings</span><span class="o">.</span><span class="n">food_manager</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thorns_manager</span> <span class="o">=</span> <span class="n">ThornsManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">manager_settings</span><span class="o">.</span><span class="n">thorns_manager</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spore_manager</span> <span class="o">=</span> <span class="n">SporeManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">manager_settings</span><span class="o">.</span><span class="n">spore_manager</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span>  <span class="o">=</span> <span class="n">PlayerManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">manager_settings</span><span class="o">.</span><span class="n">player_manager</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="p">,</span>
+                                             <span class="n">team_num</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">team_num</span><span class="p">,</span> <span class="n">player_num_per_team</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">player_num_per_team</span><span class="p">,</span> 
+                                             <span class="n">spore_manager_settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">manager_settings</span><span class="o">.</span><span class="n">spore_manager</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">collision_detection_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">collision_detection_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collision_detection</span> <span class="o">=</span> <span class="n">create_collision_detection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collision_detection_type</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Server.spawn_balls"><a class="viewcode-back" href="../../../api_doc/server.html#gobigger.server.server.Server.spawn_balls">[docs]</a>    <span class="k">def</span> <span class="nf">spawn_balls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initialize all balls</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">food_manager</span><span class="o">.</span><span class="n">init_balls</span><span class="p">()</span> <span class="c1"># init food</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thorns_manager</span><span class="o">.</span><span class="n">init_balls</span><span class="p">()</span> <span class="c1"># init thorns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">init_balls</span><span class="p">()</span> <span class="c1"># init player</span></div>
+
+    <span class="k">def</span> <span class="nf">step_state_tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">moving_balls</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># Record all balls in motion</span>
+        <span class="n">total_balls</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># Record all balls</span>
+        <span class="c1"># Update all player balls according to action</span>
+        <span class="k">if</span> <span class="n">actions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            In a single action: </span>
+<span class="sd">              If sporulation and splitting operations occur at the same time, sporulation will be given priority</span>
+<span class="sd">              If move and stop move occur at the same time in action, perform stop move operation</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+
+            <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_players</span><span class="p">():</span>
+                <span class="n">direction_x</span><span class="p">,</span> <span class="n">direction_y</span><span class="p">,</span> <span class="n">action_type</span> <span class="o">=</span> <span class="n">actions</span><span class="p">[</span><span class="n">player</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">direction_x</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">direction_y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">direction</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">direction</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="n">direction_x</span><span class="p">,</span> <span class="n">direction_y</span><span class="p">)</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">action_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># spore</span>
+                    <span class="n">tmp_spore_balls</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">eject</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">tmp_spore_ball</span> <span class="ow">in</span> <span class="n">tmp_spore_balls</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">tmp_spore_ball</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">spore_manager</span><span class="o">.</span><span class="n">add_balls</span><span class="p">(</span><span class="n">tmp_spore_ball</span><span class="p">)</span> 
+                <span class="k">if</span> <span class="n">action_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># split</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">add_balls</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+                <span class="k">if</span> <span class="n">action_type</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="c1"># stop moving</span>
+                    <span class="n">player</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span> <span class="c1"># move</span>
+                    <span class="n">player</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">state_tick_duration</span><span class="p">)</span>
+                    <span class="n">moving_balls</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">get_balls</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_players</span><span class="p">():</span>
+                <span class="n">player</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">state_tick_duration</span><span class="p">)</span>
+                <span class="n">moving_balls</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">get_balls</span><span class="p">())</span>
+                <span class="n">total_balls</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">get_balls</span><span class="p">())</span>
+        <span class="n">moving_balls</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">moving_balls</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Sort by size</span>
+        <span class="c1"># Update the status of other balls after moving, and record the balls with status updates</span>
+        <span class="k">for</span> <span class="n">thorns_ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">thorns_manager</span><span class="o">.</span><span class="n">get_balls</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">thorns_ball</span><span class="o">.</span><span class="n">moving</span><span class="p">:</span>
+                <span class="n">thorns_ball</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">state_tick_duration</span><span class="p">)</span>
+            <span class="n">moving_balls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">thorns_ball</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">spore_ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spore_manager</span><span class="o">.</span><span class="n">get_balls</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">spore_ball</span><span class="o">.</span><span class="n">moving</span><span class="p">:</span>
+                <span class="n">spore_ball</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">state_tick_duration</span><span class="p">)</span>
+        <span class="c1"># Adjust the position of all player balls</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">adjust</span><span class="p">()</span>
+        <span class="c1"># Collision detection</span>
+        <span class="n">total_balls</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_balls</span><span class="p">())</span>
+        <span class="n">total_balls</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thorns_manager</span><span class="o">.</span><span class="n">get_balls</span><span class="p">())</span>
+        <span class="n">total_balls</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spore_manager</span><span class="o">.</span><span class="n">get_balls</span><span class="p">())</span>
+        <span class="n">total_balls</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">food_manager</span><span class="o">.</span><span class="n">get_balls</span><span class="p">())</span>
+        <span class="n">collisions_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collision_detection</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">moving_balls</span><span class="p">,</span> <span class="n">total_balls</span><span class="p">)</span>
+        <span class="c1"># Process each ball in moving_balls</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">moving_ball</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">moving_balls</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">moving_ball</span><span class="o">.</span><span class="n">is_remove</span> <span class="ow">and</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">collisions_dict</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">target_ball</span> <span class="ow">in</span> <span class="n">collisions_dict</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">deal_with_collision</span><span class="p">(</span><span class="n">moving_ball</span><span class="p">,</span> <span class="n">target_ball</span><span class="p">)</span>
+        <span class="c1"># After each tick, check if there is a need to update food, thorns, and player rebirth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">food_manager</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">state_tick_duration</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spore_manager</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">state_tick_duration</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thorns_manager</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">state_tick_duration</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_time</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_tick_duration</span>
+
+    <span class="k">def</span> <span class="nf">deal_with_collision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">moving_ball</span><span class="p">,</span> <span class="n">target_ball</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">moving_ball</span><span class="o">.</span><span class="n">is_remove</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">target_ball</span><span class="o">.</span><span class="n">is_remove</span><span class="p">:</span> <span class="c1"># Ensure that the two balls are present</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">moving_ball</span><span class="p">,</span> <span class="n">CloneBall</span><span class="p">):</span> 
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_ball</span><span class="p">,</span> <span class="n">CloneBall</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">moving_ball</span><span class="o">.</span><span class="n">team_name</span> <span class="o">!=</span> <span class="n">target_ball</span><span class="o">.</span><span class="n">team_name</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">moving_ball</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">target_ball</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+                            <span class="n">moving_ball</span><span class="o">.</span><span class="n">eat</span><span class="p">(</span><span class="n">target_ball</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">remove_balls</span><span class="p">(</span><span class="n">target_ball</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">target_ball</span><span class="o">.</span><span class="n">eat</span><span class="p">(</span><span class="n">moving_ball</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">remove_balls</span><span class="p">(</span><span class="n">moving_ball</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">moving_ball</span><span class="o">.</span><span class="n">owner</span> <span class="o">!=</span> <span class="n">target_ball</span><span class="o">.</span><span class="n">owner</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">moving_ball</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">target_ball</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_clone_num</span><span class="p">(</span><span class="n">target_ball</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                                <span class="n">moving_ball</span><span class="o">.</span><span class="n">eat</span><span class="p">(</span><span class="n">target_ball</span><span class="p">)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">remove_balls</span><span class="p">(</span><span class="n">target_ball</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_clone_num</span><span class="p">(</span><span class="n">moving_ball</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                                <span class="n">target_ball</span><span class="o">.</span><span class="n">eat</span><span class="p">(</span><span class="n">moving_ball</span><span class="p">)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">remove_balls</span><span class="p">(</span><span class="n">moving_ball</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_ball</span><span class="p">,</span> <span class="n">FoodBall</span><span class="p">):</span>
+                    <span class="n">moving_ball</span><span class="o">.</span><span class="n">eat</span><span class="p">(</span><span class="n">target_ball</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">food_manager</span><span class="o">.</span><span class="n">remove_balls</span><span class="p">(</span><span class="n">target_ball</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_ball</span><span class="p">,</span> <span class="n">SporeBall</span><span class="p">):</span>
+                    <span class="n">moving_ball</span><span class="o">.</span><span class="n">eat</span><span class="p">(</span><span class="n">target_ball</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">spore_manager</span><span class="o">.</span><span class="n">remove_balls</span><span class="p">(</span><span class="n">target_ball</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_ball</span><span class="p">,</span> <span class="n">ThornsBall</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">moving_ball</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">target_ball</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+                        <span class="n">ret</span> <span class="o">=</span> <span class="n">moving_ball</span><span class="o">.</span><span class="n">eat</span><span class="p">(</span><span class="n">target_ball</span><span class="p">,</span> <span class="n">clone_num</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_clone_num</span><span class="p">(</span><span class="n">moving_ball</span><span class="p">))</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">thorns_manager</span><span class="o">.</span><span class="n">remove_balls</span><span class="p">(</span><span class="n">target_ball</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span> 
+                            <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">add_balls</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span> 
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">moving_ball</span><span class="p">,</span> <span class="n">ThornsBall</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_ball</span><span class="p">,</span> <span class="n">CloneBall</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">moving_ball</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;</span> <span class="n">target_ball</span><span class="o">.</span><span class="n">size</span><span class="p">:</span> 
+                        <span class="n">ret</span> <span class="o">=</span> <span class="n">target_ball</span><span class="o">.</span><span class="n">eat</span><span class="p">(</span><span class="n">moving_ball</span><span class="p">,</span> <span class="n">clone_num</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_clone_num</span><span class="p">(</span><span class="n">target_ball</span><span class="p">))</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">thorns_manager</span><span class="o">.</span><span class="n">remove_balls</span><span class="p">(</span><span class="n">moving_ball</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span> 
+                            <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">add_balls</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span> 
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_ball</span><span class="p">,</span> <span class="n">SporeBall</span><span class="p">):</span> 
+                    <span class="n">moving_ball</span><span class="o">.</span><span class="n">eat</span><span class="p">(</span><span class="n">target_ball</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">spore_manager</span><span class="o">.</span><span class="n">remove_balls</span><span class="p">(</span><span class="n">target_ball</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">moving_ball</span><span class="p">,</span> <span class="n">ThornsBall</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_ball</span><span class="p">,</span> <span class="n">CloneBall</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_ball</span><span class="p">,</span> <span class="n">ThornsBall</span><span class="p">):</span> 
+                    <span class="n">target_ball</span><span class="o">.</span><span class="n">eat</span><span class="p">(</span><span class="n">moving_ball</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">spore_manager</span><span class="o">.</span><span class="n">remove_balls</span><span class="p">(</span><span class="n">moving_ball</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span>
+
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spawn_balls</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end_flag</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end_flag</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screens_all</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screens_partial</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">food_manager</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thorns_manager</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spore_manager</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_video</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_time</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">match_time</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">save_video</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save_mp4</span><span class="p">(</span><span class="n">save_path</span><span class="o">=</span><span class="n">save_path</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_flag</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state_tick_per_action_tick</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">step_state_tick</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">save_video</span><span class="p">:</span>
+                        <span class="n">screen_data_all</span><span class="p">,</span> <span class="n">screen_data_players</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">get_tick_all_colorful</span><span class="p">(</span>
+                            <span class="n">food_balls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">food_manager</span><span class="o">.</span><span class="n">get_balls</span><span class="p">(),</span>
+                            <span class="n">thorns_balls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">thorns_manager</span><span class="o">.</span><span class="n">get_balls</span><span class="p">(),</span>
+                            <span class="n">spore_balls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spore_manager</span><span class="o">.</span><span class="n">get_balls</span><span class="p">(),</span>
+                            <span class="n">players</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_players</span><span class="p">())</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">screens_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">screen_data_all</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">player_name</span><span class="p">,</span> <span class="n">screen_data_player</span> <span class="ow">in</span> <span class="n">screen_data_players</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                            <span class="k">if</span> <span class="n">player_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">screens_partial</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">screens_partial</span><span class="p">[</span><span class="n">player_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">screens_partial</span><span class="p">[</span><span class="n">player_name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">screen_data_player</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">step_state_tick</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">set_render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">render</span> <span class="o">=</span> <span class="n">render</span>
+
+    <span class="k">def</span> <span class="nf">obs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs_type</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">obs_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="s1">&#39;single&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;render&#39;</span><span class="p">)</span>
+        <span class="n">team_name_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_teams_size</span><span class="p">()</span>
+        <span class="n">global_state</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;border&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">map_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_height</span><span class="p">],</span>
+            <span class="s1">&#39;total_time&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">match_time</span><span class="p">,</span>
+            <span class="s1">&#39;last_time&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_time</span><span class="p">,</span>
+            <span class="s1">&#39;leaderboard&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">):</span> <span class="n">team_name_size</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">team_num</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">screen_data_players</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">update_all</span><span class="p">(</span><span class="n">food_balls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">food_manager</span><span class="o">.</span><span class="n">get_balls</span><span class="p">(),</span>
+                                                        <span class="n">thorns_balls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">thorns_manager</span><span class="o">.</span><span class="n">get_balls</span><span class="p">(),</span>
+                                                        <span class="n">spore_balls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spore_manager</span><span class="o">.</span><span class="n">get_balls</span><span class="p">(),</span>
+                                                        <span class="n">players</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_players</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">global_state</span><span class="p">,</span> <span class="n">screen_data_players</span>
+
+    <span class="k">def</span> <span class="nf">save_mp4</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="n">video_id</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">-%H-%M-%S&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">localtime</span><span class="p">())</span>
+        <span class="n">fps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_tick_per_second</span>
+        <span class="c1"># save all</span>
+        <span class="n">video_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">-all.mp4&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">video_id</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">(</span><span class="n">video_file</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter_fourcc</span><span class="p">(</span><span class="o">*</span><span class="s1">&#39;MP4V&#39;</span><span class="p">),</span> <span class="n">fps</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">screens_all</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">screen</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">screens_all</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+        <span class="c1"># save partial</span>
+        <span class="k">for</span> <span class="n">player_name</span><span class="p">,</span> <span class="n">screens</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">screens_partial</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">video_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">-</span><span class="si">{:02d}</span><span class="s1">.mp4&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">video_id</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">player_name</span><span class="p">)))</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">(</span><span class="n">video_file</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter_fourcc</span><span class="p">(</span><span class="o">*</span><span class="s1">&#39;MP4V&#39;</span><span class="p">),</span> <span class="n">fps</span><span class="p">,</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span><span class="mi">300</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">screen</span> <span class="ow">in</span> <span class="n">screens</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_player_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_player_names</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_team_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_team_names</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_player_names_with_team</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_player_names_with_team</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;render&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span> <span class="o">=</span> <span class="n">seed</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_seed</span><span class="p">)</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_seed</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, OpenDILab Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

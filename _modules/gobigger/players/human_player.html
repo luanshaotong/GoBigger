@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>gobigger.players.human_player &mdash; gobigger 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> gobigger
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">Tutorial</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/index.html">API Doc</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq/index.html">FAQ</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">gobigger</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>gobigger.players.human_player</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for gobigger.players.human_player</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">from</span> <span class="nn">pygame.math</span> <span class="kn">import</span> <span class="n">Vector2</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">.base_player</span> <span class="kn">import</span> <span class="n">BasePlayer</span>
+<span class="kn">from</span> <span class="nn">gobigger.balls</span> <span class="kn">import</span> <span class="n">FoodBall</span><span class="p">,</span> <span class="n">ThornsBall</span><span class="p">,</span> <span class="n">CloneBall</span><span class="p">,</span> <span class="n">SporeBall</span>
+
+
+<div class="viewcode-block" id="HumanPlayer"><a class="viewcode-back" href="../../../api_doc/players.html#gobigger.players.human_player.HumanPlayer">[docs]</a><span class="k">class</span> <span class="nc">HumanPlayer</span><span class="p">(</span><span class="n">BasePlayer</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">team_name</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">border</span><span class="p">,</span> <span class="n">spore_settings</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">team_name</span> <span class="o">=</span> <span class="n">team_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">border</span> <span class="o">=</span> <span class="n">border</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">balls</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ball_settings</span> <span class="o">=</span> <span class="n">cfg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spore_settings</span> <span class="o">=</span> <span class="n">spore_settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_flag</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="HumanPlayer.get_clone_num"><a class="viewcode-back" href="../../../api_doc/players.html#gobigger.players.human_player.HumanPlayer.get_clone_num">[docs]</a>    <span class="k">def</span> <span class="nf">get_clone_num</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Get how many avatars the current player has</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HumanPlayer.get_balls"><a class="viewcode-back" href="../../../api_doc/players.html#gobigger.players.human_player.HumanPlayer.get_balls">[docs]</a>    <span class="k">def</span> <span class="nf">get_balls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Get all the balls of the current player</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="HumanPlayer.add_balls"><a class="viewcode-back" href="../../../api_doc/players.html#gobigger.players.human_player.HumanPlayer.add_balls">[docs]</a>    <span class="k">def</span> <span class="nf">add_balls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">balls</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Add new avatars</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            balls &lt;List[CloneBall] or CloneBall&gt;: It can be a list or a single doppelganger</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">balls</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="n">balls</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="p">[</span><span class="n">ball</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ball</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">balls</span><span class="p">,</span> <span class="n">CloneBall</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="p">[</span><span class="n">balls</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">balls</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="HumanPlayer.move"><a class="viewcode-back" href="../../../api_doc/players.html#gobigger.players.human_player.HumanPlayer.move">[docs]</a>    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Move all balls controlled by the player</span>
+<span class="sd">            The main logic is</span>
+<span class="sd">             1. Processing stopped state</span>
+<span class="sd">             2. If it is stopping, control all balls to move closer to the center of mass</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            direction &lt;Vector2&gt;: A point in the unit circle</span>
+<span class="sd">            duration &lt;float&gt;: time</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            position &lt;Vector2&gt;: position after moving </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">direction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">stop_flag</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># Exit stopped state</span>
+            <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">ball</span><span class="o">.</span><span class="n">stop_flag</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_flag</span><span class="p">:</span> 
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_clone_num</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> 
+                <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">ball</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">given_acc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">given_acc_center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="kn">import</span> <span class="nn">pdb</span><span class="p">;</span> <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1">#If there are multiple balls, control them to move to the center</span>
+                <span class="n">centroid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cal_centroid</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="n">given_acc_center</span> <span class="o">=</span> <span class="n">centroid</span> <span class="o">-</span> <span class="n">ball</span><span class="o">.</span><span class="n">position</span>
+                    <span class="k">if</span> <span class="n">given_acc_center</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">given_acc_center</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mf">0.000001</span><span class="p">,</span> <span class="mf">0.000001</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">given_acc_center</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">given_acc_center</span> <span class="o">=</span> <span class="n">given_acc_center</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+                    <span class="n">given_acc_center</span> <span class="o">*=</span> <span class="mi">20</span>
+                    <span class="n">ball</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">given_acc</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">given_acc_center</span><span class="o">=</span><span class="n">given_acc_center</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_clone_num</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="n">ball</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">given_acc</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">given_acc_center</span><span class="o">=</span><span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">centroid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cal_centroid</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="n">given_acc_center</span> <span class="o">=</span> <span class="n">centroid</span> <span class="o">-</span> <span class="n">ball</span><span class="o">.</span><span class="n">position</span>
+                    <span class="k">if</span> <span class="n">given_acc_center</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">given_acc_center</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mf">0.000001</span><span class="p">,</span> <span class="mf">0.000001</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">given_acc_center</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">given_acc_center</span> <span class="o">=</span> <span class="n">given_acc_center</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+                    <span class="n">given_acc_center</span> <span class="o">*=</span> <span class="mi">20</span>
+                    <span class="n">ball</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">given_acc</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">given_acc_center</span><span class="o">=</span><span class="n">given_acc_center</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size_decay</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="HumanPlayer.size_decay"><a class="viewcode-back" href="../../../api_doc/players.html#gobigger.players.human_player.HumanPlayer.size_decay">[docs]</a>    <span class="k">def</span> <span class="nf">size_decay</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview: </span>
+<span class="sd">            The player’s balls&#39; size will decay over time</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">ball</span><span class="o">.</span><span class="n">size_decay</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="HumanPlayer.eject"><a class="viewcode-back" href="../../../api_doc/players.html#gobigger.players.human_player.HumanPlayer.eject">[docs]</a>    <span class="k">def</span> <span class="nf">eject</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            All clones controlled by the player perform the spore-spitting action</span>
+<span class="sd">        Return:</span>
+<span class="sd">            &lt;list&gt;: list of new spores</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ball</span><span class="o">.</span><span class="n">eject</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="HumanPlayer.get_keys_sort_by_balls"><a class="viewcode-back" href="../../../api_doc/players.html#gobigger.players.human_player.HumanPlayer.get_keys_sort_by_balls">[docs]</a>    <span class="k">def</span> <span class="nf">get_keys_sort_by_balls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Sort by ball size from largest to smallest</span>
+<span class="sd">        Return:</span>
+<span class="sd">            &lt;list&gt;: list of names</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> 
+        <span class="n">backitems</span><span class="o">=</span><span class="p">[[</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">items</span><span class="p">]</span> 
+        <span class="n">backitems</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+        <span class="k">return</span> <span class="p">[</span> <span class="n">backitems</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">backitems</span><span class="p">))]</span> </div>
+
+<div class="viewcode-block" id="HumanPlayer.split"><a class="viewcode-back" href="../../../api_doc/players.html#gobigger.players.human_player.HumanPlayer.split">[docs]</a>    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            All avatars controlled by the player perform splits, from large to small</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">balls_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_keys_sort_by_balls</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">balls_keys</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_clone_num</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">ret</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">CloneBall</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_balls</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="HumanPlayer.eat"><a class="viewcode-back" href="../../../api_doc/players.html#gobigger.players.human_player.HumanPlayer.eat">[docs]</a>    <span class="k">def</span> <span class="nf">eat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ball</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="HumanPlayer.stop"><a class="viewcode-back" href="../../../api_doc/players.html#gobigger.players.human_player.HumanPlayer.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_flag</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_flag</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">centroid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cal_centroid</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">direction_center</span> <span class="o">=</span> <span class="n">centroid</span> <span class="o">-</span> <span class="n">ball</span><span class="o">.</span><span class="n">position</span>
+            <span class="k">if</span> <span class="n">direction_center</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">direction_center</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mf">0.000001</span><span class="p">,</span> <span class="mf">0.000001</span><span class="p">)</span>
+            <span class="n">ball</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="n">direction_center</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="k">def</span> <span class="nf">remove_balls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ball</span><span class="p">):</span>
+        <span class="n">ball</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ball</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="p">[</span><span class="n">ball</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">respawn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+        <span class="n">ball_name</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid1</span><span class="p">()</span>
+        <span class="n">ball</span> <span class="o">=</span> <span class="n">CloneBall</span><span class="p">(</span><span class="n">team_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">team_name</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">ball_name</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="n">position</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">border</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> 
+                         <span class="n">spore_settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spore_settings</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">ball_settings</span><span class="p">)</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">ball</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">balls</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">balls</span><span class="p">[</span><span class="n">ball</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ball</span>   
+        <span class="k">return</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="HumanPlayer.cal_centroid"><a class="viewcode-back" href="../../../api_doc/players.html#gobigger.players.human_player.HumanPlayer.cal_centroid">[docs]</a>    <span class="k">def</span> <span class="nf">cal_centroid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Calculate the centroid</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">total_size</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_balls</span><span class="p">():</span>
+            <span class="n">x</span> <span class="o">+=</span> <span class="n">ball</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">ball</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span>
+            <span class="n">y</span> <span class="o">+=</span> <span class="n">ball</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">ball</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span>
+            <span class="n">total_size</span> <span class="o">+=</span> <span class="n">ball</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">return</span> <span class="n">Vector2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">total_size</span></div>
+
+<div class="viewcode-block" id="HumanPlayer.adjust"><a class="viewcode-back" href="../../../api_doc/players.html#gobigger.players.human_player.HumanPlayer.adjust">[docs]</a>    <span class="k">def</span> <span class="nf">adjust</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Adjust all the balls controlled by the player, including two parts</span>
+<span class="sd">            1. Possible Rigid Body Collision</span>
+<span class="sd">            2. Possible ball-ball fusion</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">balls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_balls</span><span class="p">()</span>
+        <span class="n">balls</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">balls</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">balls_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">balls</span><span class="p">)</span>
+        <span class="n">to_remove_balls</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">balls_num</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">balls</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">is_remove</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">balls_num</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">balls</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">is_remove</span><span class="p">:</span>
+                        <span class="n">dis</span> <span class="o">=</span> <span class="n">balls</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_dis</span><span class="p">(</span><span class="n">balls</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="n">dis</span> <span class="o">&lt;</span> <span class="n">balls</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">radius</span> <span class="o">+</span> <span class="n">balls</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">radius</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">balls</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">judge_rigid</span><span class="p">(</span><span class="n">balls</span><span class="p">[</span><span class="n">j</span><span class="p">]):</span>
+                                <span class="n">balls</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">rigid_collision</span><span class="p">(</span><span class="n">balls</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="c1"># Rigid body collision                       </span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">dis</span> <span class="o">&lt;</span> <span class="n">balls</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">radius</span> <span class="ow">or</span> <span class="n">dis</span> <span class="o">&lt;</span> <span class="n">balls</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">radius</span><span class="p">:</span> 
+                                    <span class="k">if</span> <span class="n">balls</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">balls</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+                                        <span class="n">balls</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">eat</span><span class="p">(</span><span class="n">balls</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                                        <span class="n">balls</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+                                        <span class="n">to_remove_balls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">balls</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                                    <span class="k">else</span><span class="p">:</span>
+                                        <span class="n">balls</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">eat</span><span class="p">(</span><span class="n">balls</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                                        <span class="n">balls</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+                                        <span class="n">to_remove_balls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">balls</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="n">to_remove_balls</span><span class="p">:</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">remove_balls</span><span class="p">(</span><span class="n">ball</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HumanPlayer.get_total_size"><a class="viewcode-back" href="../../../api_doc/players.html#gobigger.players.human_player.HumanPlayer.get_total_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_total_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Overview: </span>
+<span class="sd">                Get the total size of all balls of the current player</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">total_size</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ball</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_balls</span><span class="p">():</span>
+            <span class="n">total_size</span> <span class="o">+=</span> <span class="n">ball</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">return</span> <span class="n">total_size</span></div></div>
+
+
+
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, OpenDILab Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
