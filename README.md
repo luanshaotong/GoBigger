@@ -1,10 +1,32 @@
-# Go-Bigger: Multi-Agent Decision Intelligence Environment
+# Go-Bigger: Multi-agent cooperation and competition playground
 
-GoBigger is a **multi-agent** environment not only for reinforce learning. It is similar to [Agar](https://agar.io/), which is a massively multiplayer online action game created by Brazilian developer Matheus Valadares. In GoBigger, players control one or more circular balls in a map. The goal is to gain as much size as possible by eating food balls and other balls smaller than the player's balls while avoiding larger ones which can eat the player's balls. Each player starts with one ball, but players can split a ball into two when it reaches a sufficient size, allowing them to control multiple balls.
+GoBigger is a **multi-agent** AI playground for decision intelligence. It is similar to [Agar](https://agar.io/), which is a multiplayer online game created by Brazilian developer Matheus Valadares. In GoBigger, players control one or more circular balls in a map. The goal is to gain as much size as possible by eating food balls and other balls smaller than the player's balls while avoiding being eaten by larger opponents. 
 
 GoBigger allows users to interact with the multi-agent environment easily. Through the given interface, users can get observations by actions created by their policy. Users can also customize their game environments by changing the args in the config.
 
 <div align=center><img width = '640' height ='200' src ="https://github.com/opendilab/GoBigger/blob/main/assets/overview.gif"/></div>
+
+
+**Concept**
+
+`Match`:
+
+`Agent`: Each AI agent control several player (xx by default)
+
+`Player`: Each player starts with one ball, and can be split up to 16 balls. 
+
+`ball`: xxxx
+
+**Observation space**
+
+`spatial space`: xxx
+`xxx space`: xxx
+
+**Action space**
+
+`split:` players can split a ball into two when it reaches a sufficient size, allowing them to control multiple balls.
+`spit:` 
+`direction control` xxxx
 
 ## Getting Started
 
