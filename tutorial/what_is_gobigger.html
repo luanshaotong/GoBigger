@@ -89,6 +89,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#balls">Balls</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#rules-of-game">Rules of Game</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#high-level-operations">High-level Operations</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="real_time_interaction_with_game.html">Real-time Interaction with game</a></li>
@@ -258,6 +259,25 @@
 <li><p>The player’s vision will depends on its balls’ positions. We calculate the centroid of a player, and get the smallest external square of all balls. After that, we expand this square as the final vision. To guarantee each player’s vision, we also provide them with the basic vision even if all their balls gather together. For example, if the balls of a player are dispersed enough, a larger vision will be applied for this player.</p></li>
 <li><p>Each ball has its own speed limit based on its size. In order to ensure the balance of the game, we let larger balls move slow and smaller balls move fast.</p></li>
 </ol>
+</div>
+<div class="section" id="high-level-operations">
+<h2>High-level Operations<a class="headerlink" href="#high-level-operations" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id9">
+<a class="reference internal image-reference" href="../_images/merge_quickly.gif"><img alt="../_images/merge_quickly.gif" src="../_images/merge_quickly.gif" style="width: 320px;" /></a>
+<p class="caption"><span class="caption-text">Eject towards the center.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-center" id="id10">
+<a class="reference internal image-reference" href="../_images/split_eat_all.gif"><img alt="../_images/split_eat_all.gif" src="../_images/split_eat_all.gif" style="width: 320px;" /></a>
+<p class="caption"><span class="caption-text">Surround others by splitting.</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-center" id="id11">
+<a class="reference internal image-reference" href="../_images/fast_eat.gif"><img alt="../_images/fast_eat.gif" src="../_images/fast_eat.gif" style="width: 320px;" /></a>
+<p class="caption"><span class="caption-text">Eat food balls quickly.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-center" id="id12">
+<a class="reference internal image-reference" href="../_images/eject_merger.gif"><img alt="../_images/eject_merger.gif" src="../_images/eject_merger.gif" style="width: 422px;" /></a>
+<p class="caption"><span class="caption-text">Concentrate size.</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</div>
 </div>
 </div>
 

@@ -117,3 +117,42 @@ There are a few rules to be aware of as following.
 3. The player's vision will depends on its balls' positions. We calculate the centroid of a player, and get the smallest external square of all balls. After that, we expand this square as the final vision. To guarantee each player's vision, we also provide them with the basic vision even if all their balls gather together. For example, if the balls of a player are dispersed enough, a larger vision will be applied for this player. 
 
 4. Each ball has its own speed limit based on its size. In order to ensure the balance of the game, we let larger balls move slow and smaller balls move fast.
+
+
+High-level Operations
+==============================
+
+.. only:: html
+
+    .. figure:: images/merge_quickly.gif
+      :width: 320
+      :align: center
+
+      Eject towards the center.
+
+.. only:: html
+
+    .. figure:: images/split_eat_all.gif
+      :width: 320
+      :align: center
+
+      Surround others by splitting.
+
+.. only:: html
+
+    .. figure:: images/fast_eat.gif
+      :width: 320
+      :align: center
+
+      Eat food balls quickly.
+
+.. only:: html
+
+    .. figure:: images/eject_merger.gif
+      :width: 422
+      :align: center
+
+      Concentrate size.
+
+
+
