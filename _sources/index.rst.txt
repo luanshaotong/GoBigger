@@ -26,11 +26,6 @@ Indices and tables
    tutorial/index
 
 .. toctree::
-   :maxdepth: 2
-
-   challenge/index
-
-.. toctree::
    :maxdepth: 1
 
    api_doc/index
