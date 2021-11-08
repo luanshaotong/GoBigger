@@ -321,13 +321,13 @@ class Server:
         if not self._end_flag:
             for i in range(self.state_tick_per_action_tick):
                 if i == 0:
-                    self.step_state_tick(actions)
+                    t = self.step_state_tick(actions)
                     self.record_frame_for_video()
                 else:
                     self.step_state_tick()
                     if self.save_quality == 'high':
                         self.record_frame_for_video()
-        return False
+        return False, t
 
     def set_render(self, render):
         self.render = render
