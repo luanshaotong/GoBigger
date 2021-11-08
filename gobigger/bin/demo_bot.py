@@ -118,14 +118,14 @@ def demo_bot():
         t2 = time.time()
         actions = {bot_agent.name: bot_agent.step(obs[1][bot_agent.name]) for bot_agent in bot_agents}
         t3 = time.time()
-        finish_flag = server.step(actions=actions)
+        finish_flag, t = server.step(actions=actions)
         t4 = time.time()
         tmp_obs = t2-t1
         tmp_step = t4-t3
         time_obs +=  tmp_obs
         time_step += tmp_step
-        # logging.debug('{} {:.4f} obs: {:.3f} / {:.3f}, step: {:.3f} / {:.3f}'\
-        #     .format(i, server.last_time, tmp_obs, time_obs/(i+1), tmp_step, time_step/(i+1)))
+        logging.debug('{} {:.4f} obs={:.3f}/{:.3f}, step={:.3f}/{:.3f}, {} total={:.4f}/{:.4f}, action={:.4f}/{:.4f}, move={:.4f}/{:.4f}, adjust={:.4f}/{:.4f}, extend={:.4f}/{:.4f}, solve={:.4f}/{:.4f}, collision={:.4f}/{:.4f}, manager={:.4f}/{:.4f}'\
+            .format(i, server.last_time, tmp_obs, time_obs/(i+1), tmp_step, time_step/(i+1), *t))
         if finish_flag:
             logging.debug('Game Over')
             break

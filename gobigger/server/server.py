@@ -212,15 +212,24 @@ class Server:
         self.collision_time_all += t7 - t6
         self.manager_step_time_all += t8 - t7
         self.step_count += 1
-        logging.debug('{} total={:.4f}/{:.4f}, action={:.4f}/{:.4f}, move={:.4f}/{:.4f}, adjust={:.4f}/{:.4f}, extend={:.4f}/{:.4f}, solve={:.4f}/{:.4f}, collision={:.4f}/{:.4f}, manager={:.4f}/{:.4f}'\
-            .format(self.step_count, t7 - t1, self.step_time_all/self.step_count,
-                    t2 - t1, self.action_time_all/self.step_count,
-                    t3 - t2, self.move_time_all/self.step_count,
-                    t4 - t3, self.adjust_time_all/self.step_count,
-                    t5 - t4, self.extend_time_all/self.step_count,
-                    t6 - t5, self.solve_time_all/self.step_count,
-                    t7 - t6, self.collision_time_all/self.step_count,
-                    t8 - t7, self.manager_step_time_all/self.step_count))
+        # logging.debug('{} total={:.4f}/{:.4f}, action={:.4f}/{:.4f}, move={:.4f}/{:.4f}, adjust={:.4f}/{:.4f}, extend={:.4f}/{:.4f}, solve={:.4f}/{:.4f}, collision={:.4f}/{:.4f}, manager={:.4f}/{:.4f}'\
+        #     .format(self.step_count, t7 - t1, self.step_time_all/self.step_count,
+        #             t2 - t1, self.action_time_all/self.step_count,
+        #             t3 - t2, self.move_time_all/self.step_count,
+        #             t4 - t3, self.adjust_time_all/self.step_count,
+        #             t5 - t4, self.extend_time_all/self.step_count,
+        #             t6 - t5, self.solve_time_all/self.step_count,
+        #             t7 - t6, self.collision_time_all/self.step_count,
+        #             t8 - t7, self.manager_step_time_all/self.step_count))
+        return [self.step_count, t7 - t1, self.step_time_all/self.step_count,
+                t2 - t1, self.action_time_all/self.step_count,
+                t3 - t2, self.move_time_all/self.step_count,
+                t4 - t3, self.adjust_time_all/self.step_count,
+                t5 - t4, self.extend_time_all/self.step_count,
+                t6 - t5, self.solve_time_all/self.step_count,
+                t7 - t6, self.collision_time_all/self.step_count,
+                t8 - t7, self.manager_step_time_all/self.step_count]
+
 
     def deal_with_collision(self, moving_ball, target_ball):
         if not moving_ball.is_remove and not target_ball.is_remove: # Ensure that the two balls are present
