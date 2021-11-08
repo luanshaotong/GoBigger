@@ -124,8 +124,8 @@ def demo_bot():
         tmp_step = t4-t3
         time_obs +=  tmp_obs
         time_step += tmp_step
-        logging.debug('{} {:.4f} obs: {:.3f} / {:.3f}, step: {:.3f} / {:.3f}'\
-            .format(i, server.last_time, tmp_obs, time_obs/(i+1), tmp_step, time_step/(i+1)))
+        # logging.debug('{} {:.4f} obs: {:.3f} / {:.3f}, step: {:.3f} / {:.3f}'\
+        #     .format(i, server.last_time, tmp_obs, time_obs/(i+1), tmp_step, time_step/(i+1)))
         if finish_flag:
             logging.debug('Game Over')
             break
