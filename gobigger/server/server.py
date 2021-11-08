@@ -212,7 +212,7 @@ class Server:
         self.collision_time_all += t7 - t6
         self.manager_step_time_all += t8 - t7
         self.step_count += 1
-        logging.debug('{} total={:.4f}, action={:.4f}/{:.4f}, move={:.4f}/{:.4f}, adjust={:.4f}/{:.4f}, extend={:.4f}/{:.4f}, solve={:.4f}/{:.4f}, collision={:.4f}/{:.4f}, manager={:.4f}/{:.4f}'\
+        logging.debug('{} total={:.4f}/{:.4f}, action={:.4f}/{:.4f}, move={:.4f}/{:.4f}, adjust={:.4f}/{:.4f}, extend={:.4f}/{:.4f}, solve={:.4f}/{:.4f}, collision={:.4f}/{:.4f}, manager={:.4f}/{:.4f}'\
             .format(self.step_count, t7 - t1, self.step_time_all/self.step_count,
                     t2 - t1, self.action_time_all/self.step_count,
                     t3 - t2, self.move_time_all/self.step_count,
