@@ -326,14 +326,29 @@ class EnvRender(BaseRender):
         Overview:
             If player_num == 12, then the features list will contain 15 elements(12 player + food + spore + thorns)
         '''
-        features = []
-        assert len(rgb.shape) == 2
-        h, w = rgb.shape
-        for i in range(player_num):
-            features.append((rgb==PLAYER_COLORS_GRAYSCALE[i]).astype(int))
-        features.append((rgb==FOOD_COLOR_GRAYSCALE).astype(int))
-        features.append((rgb==SPORE_COLOR_GRAYSCALE).astype(int))
-        features.append((rgb==THORNS_COLOR_GRAYSCALE).astype(int))
+        # features = []
+        # assert len(rgb.shape) == 2
+        # h, w = rgb.shape
+        # for i in range(player_num):
+        #     features.append((rgb==PLAYER_COLORS_GRAYSCALE[i][0]).astype(int))
+        # features.append((rgb==FOOD_COLOR_GRAYSCALE[0]).astype(int))
+        # features.append((rgb==SPORE_COLOR_GRAYSCALE[0]).astype(int))
+        # features.append((rgb==THORNS_COLOR_GRAYSCALE[0]).astype(int))
+
+        total_len = player_num + 3
+        if not hasattr(self, 'to_equal_arr'):
+            arr = []
+            for i in range(player_num):
+                arr.append(PLAYER_COLORS_GRAYSCALE[i][0])
+            arr.append(FOOD_COLOR_GRAYSCALE[0])
+            arr.append(SPORE_COLOR_GRAYSCALE[0])
+            arr.append(THORNS_COLOR_GRAYSCALE[0])
+            self.to_equal_arr = np.array(arr, dtype=np.int)
+            self.to_equal_arr = np.reshape(total_len, 1, 1)
+        rgb = rgb.reshape(1, h, w)
+        rgb = np.repeat(rgb, total_len, axis=0)
+        features = (rgb == self.to_equal_arr).astype(int)
+
         return features
 
     def show(self):
