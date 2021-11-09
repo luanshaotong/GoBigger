@@ -106,7 +106,7 @@ class EnvRender(BaseRender):
         self.fill_spore_all_time = t_4-t_3
         self.fill_player_all_time = t_5-t_4
         self.fill_array_all_time = t_6-t_5
-        return screen_data, [t_2-t_1, self.fill_food_all_time/self.fill_count,
+        return features, [t_2-t_1, self.fill_food_all_time/self.fill_count,
                              t_3-t_2, self.fill_thorns_all_time/self.fill_count,
                              t_4-t_3, self.fill_spore_all_time/self.fill_count,
                              t_5-t_4, self.fill_player_all_time/self.fill_count,
