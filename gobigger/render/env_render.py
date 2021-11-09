@@ -344,7 +344,7 @@ class EnvRender(BaseRender):
             arr.append(SPORE_COLOR_GRAYSCALE)
             arr.append(THORNS_COLOR_GRAYSCALE)
             self.to_equal_arr = np.array(arr, dtype=np.int)
-            self.to_equal_arr = np.reshape(total_len, 1, 1)
+            self.to_equal_arr = self.to_equal_arr.reshape(total_len, 1, 1)
         rgb = rgb.reshape(1, h, w)
         rgb = np.repeat(rgb, total_len, axis=0)
         features = (rgb == self.to_equal_arr).astype(int)
