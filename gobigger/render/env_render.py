@@ -37,6 +37,7 @@ class EnvRender(BaseRender):
         self.fill_spore_all_time = 0
         self.fill_player_all_time = 0
         self.fill_array_all_time = 0
+        self.flip_all_time = 0
 
     def set_obs_settings(self, obs_settings):
         self.with_spatial = obs_settings.get('with_spatial', True)
@@ -225,6 +226,7 @@ class EnvRender(BaseRender):
                     t6 = time.time()
                     screen_data_player = np.fliplr(screen_data_player)
                     screen_data_player = np.rot90(screen_data_player)
+                    t9 = time.time()
                     feature_layers = self.transfer_rgb_to_features(screen_data_player, player_num=len(players))
                 t7 = time.time()
                 if self.with_speed:
@@ -240,13 +242,15 @@ class EnvRender(BaseRender):
                 }
                 self.get_rectangle_by_player_all_time += t5-t4
                 self.get_clip_screen_all_time += t6-t5
-                self.transfer_rgb_to_features_all_time += t7-t6
+                self.transfer_rgb_to_features_all_time += t7-t9
+                self.flip_all_time += t9 - t6
                 self.get_overlap_all_time += t8-t7
         self.fill_all_time += t2-t1
         t = [self.fill_count, t2-t1, self.fill_all_time/self.fill_count,
              t5-t4, self.get_rectangle_by_player_all_time/self.fill_count,
              t6-t5, self.get_clip_screen_all_time/self.fill_count,
-             t7-t6, self.transfer_rgb_to_features_all_time/self.fill_count,
+             t7-t9, self.transfer_rgb_to_features_all_time/self.fill_count,
+             t9-t6, self.flip_all_time/self.fill_count,
              t8-t7, self.get_overlap_all_time/self.fill_count, *t_f]
         return screen_data_all, screen_data_players, t
 
