@@ -92,9 +92,8 @@ class EnvRender(BaseRender):
         spore_features = self.fill_spore_balls(spore_balls)
         t_4 = time.time()
         for index, player in enumerate(players):
-            for ball in player.get_balls():
-                player_features = self.fill_clone_balls(player.get_balls())
-                features.append(player_features)
+            player_features = self.fill_clone_balls(player.get_balls())
+            features.append(player_features)
         t_5 = time.time()
         features.append(food_features)
         features.append(spore_features)
