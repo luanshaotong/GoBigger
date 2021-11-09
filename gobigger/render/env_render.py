@@ -38,6 +38,7 @@ class EnvRender(BaseRender):
         self.fill_player_all_time = 0
         self.fill_array_all_time = 0
         self.flip_all_time = 0
+        self.t_transfer_all_time = 0
 
     def set_obs_settings(self, obs_settings):
         self.with_spatial = obs_settings.get('with_spatial', True)
@@ -222,6 +223,7 @@ class EnvRender(BaseRender):
             transfer_rgb_to_features_temp_time = 0
             flip_temp_time = 0
             get_overlap_temp_time = 0
+            t_transfer_temp_time = 0
             for player in players:
                 t4 = time.time()
                 rectangle = self.get_rectangle_by_player(player)
@@ -232,7 +234,7 @@ class EnvRender(BaseRender):
                     screen_data_player = np.fliplr(screen_data_player)
                     screen_data_player = np.rot90(screen_data_player)
                     t9 = time.time()
-                    feature_layers = self.transfer_rgb_to_features(screen_data_player, player_num=len(players))
+                    feature_layers, t_transfer = self.transfer_rgb_to_features(screen_data_player, player_num=len(players))
                 t7 = time.time()
                 if self.with_speed:
                     overlap = self.get_overlap_with_speed(rectangle, food_balls, thorns_balls, spore_balls, players)
@@ -250,17 +252,20 @@ class EnvRender(BaseRender):
                 transfer_rgb_to_features_temp_time += t7-t9
                 flip_temp_time += t9 - t6
                 get_overlap_temp_time += t8-t7
+                t_transfer_temp_time += t_transfer
 
             self.get_rectangle_by_player_all_time += get_rectangle_by_player_temp_time
             self.get_clip_screen_all_time += get_clip_screen_temp_time
             self.transfer_rgb_to_features_all_time += transfer_rgb_to_features_temp_time
             self.flip_all_time += flip_temp_time
             self.get_overlap_all_time += get_overlap_temp_time
+            self.t_transfer_all_time += t_transfer_temp_time
         self.fill_all_time += t2-t1
         t = [self.fill_count, t2-t1, self.fill_all_time/self.fill_count,
              get_rectangle_by_player_temp_time, self.get_rectangle_by_player_all_time/self.fill_count,
              get_clip_screen_temp_time, self.get_clip_screen_all_time/self.fill_count,
              transfer_rgb_to_features_temp_time, self.transfer_rgb_to_features_all_time/self.fill_count,
+             t_transfer_temp_time, self.t_transfer_all_time/self.fill_count,
              flip_temp_time, self.flip_all_time/self.fill_count,
              get_overlap_temp_time, self.get_overlap_all_time/self.fill_count, *t_f]
         return screen_data_all, screen_data_players, t
@@ -346,11 +351,13 @@ class EnvRender(BaseRender):
             arr.append(THORNS_COLOR_GRAYSCALE)
             self.to_equal_arr = np.array(arr, dtype=np.int)
             self.to_equal_arr = self.to_equal_arr.reshape(total_len, 1, 1)
+        t_transfer_1 = time.time()
         rgb = rgb.reshape(1, h, w)
         rgb = np.repeat(rgb, total_len, axis=0)
         features = (rgb == self.to_equal_arr).astype(int)
+        t_transfer_2 = time.time()
 
-        return features
+        return features, t_transfer_2 - t_transfer_1
 
     def show(self):
         raise NotImplementedError
