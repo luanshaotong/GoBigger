@@ -26,6 +26,12 @@ class EnvRender(BaseRender):
         self.scale_up_ratio = scale_up_ratio
         self.vision_x_min = vision_x_min
         self.vision_y_min = vision_y_min
+        self.fill_all_time = 0
+        self.transfer_rgb_to_features_all_time = 0
+        self.get_overlap_all_time = 0
+        self.get_clip_screen_all_time = 0
+        self.get_rectangle_by_player_all_time = 0
+        self.fill_count = 0
 
     def set_obs_settings(self, obs_settings):
         self.with_spatial = obs_settings.get('with_spatial', True)
@@ -152,10 +158,12 @@ class EnvRender(BaseRender):
         feature_layers = None
         overlap = None
         rectangle = None
+        t1 = time.time()
         if self.with_spatial:
             screen_all = pygame.Surface((self.width, self.height), depth=8)
             screen_all.fill(BACKGROUND_GRAYSCALE)
             screen_data_all = self.fill_all(screen_all, food_balls, thorns_balls, spore_balls, players)
+        t2 = time.time()
         screen_data_players = {}
 
         if self.with_all_vision:
@@ -184,23 +192,39 @@ class EnvRender(BaseRender):
                     }
         else:
             for player in players:
+                t4 = time.time()
                 rectangle = self.get_rectangle_by_player(player)
+                t5 = time.time()
                 if self.with_spatial:
                     screen_data_player = self.get_clip_screen(screen_data_all, rectangle=rectangle)
+                    t6 = time.time()
                     screen_data_player = np.fliplr(screen_data_player)
                     screen_data_player = np.rot90(screen_data_player)
                     feature_layers = self.transfer_rgb_to_features(screen_data_player, player_num=len(players))
+                t7 = time.time()
                 if self.with_speed:
                     overlap = self.get_overlap_with_speed(rectangle, food_balls, thorns_balls, spore_balls, players)
                 else:
                     overlap = self.get_overlap(rectangle, food_balls, thorns_balls, spore_balls, players)
+                t8 = time.time()
                 screen_data_players[player.name] = {
                     'feature_layers': feature_layers,
                     'rectangle': rectangle,
                     'overlap': overlap,
                     'team_name': player.team_name,
                 }
-        return screen_data_all, screen_data_players
+                self.get_rectangle_by_player_all_time += t5-t4
+                self.get_clip_screen_all_time += t6-t5
+                self.transfer_rgb_to_features_all_time += t7-t6
+                self.get_overlap_all_time += t8-t7
+        self.fill_all_time += t2-t1
+        self.fill_count += 1
+        t = [self.fill_count, t2-t1, self.fill_all_time/self.fill_count,
+             t5-t4, self.get_rectangle_by_player_all_time/self.fill_count,
+             t6-t5, self.get_clip_screen_all_time/self.fill_count,
+             t7-t6, self.transfer_rgb_to_features_all_time/self.fill_count,
+             t8-t7, self.get_overlap_all_time/self.fill_count]
+        return screen_data_all, screen_data_players, t
 
     def render_all_balls_colorful(self, screen, food_balls, thorns_balls, spore_balls, players, player_num_per_team):
         # render all balls

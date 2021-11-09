@@ -345,11 +345,14 @@ class Server:
                 str(i): team_name_size[str(i)] for i in range(self.team_num)
             }
         }
-        _, screen_data_players = self.render.update_all(food_balls=self.food_manager.get_balls(),
+        t1 = time.time()
+        _, screen_data_players, t = self.render.update_all(food_balls=self.food_manager.get_balls(),
                                                         thorns_balls=self.thorns_manager.get_balls(),
                                                         spore_balls=self.spore_manager.get_balls(),
                                                         players=self.player_manager.get_players())
-        return global_state, screen_data_players
+        t2 = time.time()
+        t.insert(0, t2-t1)
+        return global_state, screen_data_players, t
 
     def save_mp4(self, save_path=''):
         # self.video_id = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())

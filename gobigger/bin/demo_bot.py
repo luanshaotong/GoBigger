@@ -115,6 +115,7 @@ def demo_bot():
     for i in range(100000):
         t1 = time.time()
         obs = server.obs()
+        t_obs = obs[-1]
         t2 = time.time()
         actions = {bot_agent.name: bot_agent.step(obs[1][bot_agent.name]) for bot_agent in bot_agents}
         t3 = time.time()
@@ -124,7 +125,9 @@ def demo_bot():
         tmp_step = t4-t3
         time_obs +=  tmp_obs
         time_step += tmp_step
-        logging.debug('{} {:.4f} obs={:.3f}/{:.3f}, step={:.3f}/{:.3f}, {} total={:.4f}/{:.4f}, action={:.4f}/{:.4f}, move={:.4f}/{:.4f}, adjust={:.4f}/{:.4f}, extend={:.4f}/{:.4f}, solve={:.4f}/{:.4f}, collision={:.4f}/{:.4f}, manager={:.4f}/{:.4f}'\
+        # logging.debug('{} {:.4f} obs={:.3f}/{:.3f}, step={:.3f}/{:.3f}, {} total={:.4f}/{:.4f}, action={:.4f}/{:.4f}, move={:.4f}/{:.4f}, adjust={:.4f}/{:.4f}, extend={:.4f}/{:.4f}, solve={:.4f}/{:.4f}, collision={:.4f}/{:.4f}, manager={:.4f}/{:.4f}'\
+        #     .format(i, server.last_time, tmp_obs, time_obs/(i+1), tmp_step, time_step/(i+1), *t))
+        logging.debug('{} {:.4f} obs={:.3f}/{:.3f}, step={:.3f}/{:.3f}, {} fill_all={:.4f}/{:.4f}, rectangle={:.4f}/{:.4f}, clip={:.4f}/{:.4f}, transfer={:.4f}/{:.4f}, overlap={:.4f}/{:.4f}'\
             .format(i, server.last_time, tmp_obs, time_obs/(i+1), tmp_step, time_step/(i+1), *t))
         if finish_flag:
             logging.debug('Game Over')
