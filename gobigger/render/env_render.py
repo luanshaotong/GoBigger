@@ -32,6 +32,11 @@ class EnvRender(BaseRender):
         self.get_clip_screen_all_time = 0
         self.get_rectangle_by_player_all_time = 0
         self.fill_count = 0
+        self.fill_food_all_time = 0
+        self.fill_thorns_all_time = 0
+        self.fill_spore_all_time = 0
+        self.fill_player_all_time = 0
+        self.fill_array_all_time = 0
 
     def set_obs_settings(self, obs_settings):
         self.with_spatial = obs_settings.get('with_spatial', True)
@@ -39,19 +44,33 @@ class EnvRender(BaseRender):
         self.with_all_vision = obs_settings.get('with_all_vision', False)
 
     def fill_all(self, screen, food_balls, thorns_balls, spore_balls, players):
-        font = pygame.font.SysFont('Menlo', 12, True)
         # render all balls
+        t_1 = time.time()
         for ball in food_balls:
             pygame.draw.circle(screen, FOOD_COLOR_GRAYSCALE, ball.position, ball.radius)
+        t_2 = time.time()
         for ball in thorns_balls:
             pygame.draw.polygon(screen, THORNS_COLOR_GRAYSCALE, to_aliased_circle(ball.position, ball.radius))
+        t_3 = time.time()
         for ball in spore_balls:
             pygame.draw.circle(screen, SPORE_COLOR_GRAYSCALE, ball.position, ball.radius)
+        t_4 = time.time()
         for index, player in enumerate(players):
             for ball in player.get_balls():
                 pygame.draw.circle(screen, PLAYER_COLORS_GRAYSCALE[int(ball.owner)], ball.position, ball.radius)
+        t_5 = time.time()
         screen_data = pygame.surfarray.array2d(screen)
-        return screen_data
+        t_6 = time.time()
+        self.fill_food_all_time += t_2-t_1
+        self.fill_thorns_all_time = t_3-t_2
+        self.fill_spore_all_time = t_4-t_3
+        self.fill_player_all_time = t_5-t_4
+        self.fill_array_all_time = t_6-t_5
+        return screen_data, [t_2-t_1, self.fill_food_all_time/self.fill_count,
+                             t_3-t_2, self.fill_thorns_all_time/self.fill_count,
+                             t_4-t_3, self.fill_spore_all_time/self.fill_count,
+                             t_5-t_4, self.fill_player_all_time/self.fill_count,
+                             t_6-t_5, self.fill_array_all_time/self.fill_count]
 
     def get_clip_screen(self, screen_data, rectangle):
         if len(screen_data.shape) == 3:
@@ -158,11 +177,12 @@ class EnvRender(BaseRender):
         feature_layers = None
         overlap = None
         rectangle = None
+        self.fill_count += 1
         t1 = time.time()
         if self.with_spatial:
             screen_all = pygame.Surface((self.width, self.height), depth=8)
             screen_all.fill(BACKGROUND_GRAYSCALE)
-            screen_data_all = self.fill_all(screen_all, food_balls, thorns_balls, spore_balls, players)
+            screen_data_all, t_f = self.fill_all(screen_all, food_balls, thorns_balls, spore_balls, players)
         t2 = time.time()
         screen_data_players = {}
 
@@ -218,12 +238,11 @@ class EnvRender(BaseRender):
                 self.transfer_rgb_to_features_all_time += t7-t6
                 self.get_overlap_all_time += t8-t7
         self.fill_all_time += t2-t1
-        self.fill_count += 1
         t = [self.fill_count, t2-t1, self.fill_all_time/self.fill_count,
              t5-t4, self.get_rectangle_by_player_all_time/self.fill_count,
              t6-t5, self.get_clip_screen_all_time/self.fill_count,
              t7-t6, self.transfer_rgb_to_features_all_time/self.fill_count,
-             t8-t7, self.get_overlap_all_time/self.fill_count]
+             t8-t7, self.get_overlap_all_time/self.fill_count, *t_f]
         return screen_data_all, screen_data_players, t
 
     def render_all_balls_colorful(self, screen, food_balls, thorns_balls, spore_balls, players, player_num_per_team):
