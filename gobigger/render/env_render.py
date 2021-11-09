@@ -335,6 +335,7 @@ class EnvRender(BaseRender):
         # features.append((rgb==SPORE_COLOR_GRAYSCALE).astype(int))
         # features.append((rgb==THORNS_COLOR_GRAYSCALE).astype(int))
 
+        h, w = rgb.shape
         total_len = player_num + 3
         if not hasattr(self, 'to_equal_arr'):
             arr = []
