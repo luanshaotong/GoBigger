@@ -217,6 +217,11 @@ class EnvRender(BaseRender):
                         'team_name': player.team_name,
                     }
         else:
+            get_rectangle_by_player_temp_time = 0
+            get_clip_screen_temp_time = 0
+            transfer_rgb_to_features_temp_time = 0
+            flip_temp_time = 0
+            get_overlap_temp_time = 0
             for player in players:
                 t4 = time.time()
                 rectangle = self.get_rectangle_by_player(player)
@@ -240,18 +245,24 @@ class EnvRender(BaseRender):
                     'overlap': overlap,
                     'team_name': player.team_name,
                 }
-                self.get_rectangle_by_player_all_time += t5-t4
-                self.get_clip_screen_all_time += t6-t5
-                self.transfer_rgb_to_features_all_time += t7-t9
-                self.flip_all_time += t9 - t6
-                self.get_overlap_all_time += t8-t7
+                get_rectangle_by_player_temp_time += t5-t4
+                get_clip_screen_temp_time += t6-t5
+                transfer_rgb_to_features_temp_time += t7-t9
+                flip_temp_time += t9 - t6
+                get_overlap_temp_time += t8-t7
+
+            self.get_rectangle_by_player_all_time += get_rectangle_by_player_temp_time
+            self.get_clip_screen_all_time += get_clip_screen_temp_time
+            self.transfer_rgb_to_features_all_time += transfer_rgb_to_features_temp_time
+            self.flip_all_time += flip_temp_time
+            self.get_overlap_all_time += get_overlap_temp_time
         self.fill_all_time += t2-t1
         t = [self.fill_count, t2-t1, self.fill_all_time/self.fill_count,
-             t5-t4, self.get_rectangle_by_player_all_time/self.fill_count,
-             t6-t5, self.get_clip_screen_all_time/self.fill_count,
-             t7-t9, self.transfer_rgb_to_features_all_time/self.fill_count,
-             t9-t6, self.flip_all_time/self.fill_count,
-             t8-t7, self.get_overlap_all_time/self.fill_count, *t_f]
+             get_rectangle_by_player_temp_time, self.get_rectangle_by_player_all_time/self.fill_count,
+             get_clip_screen_temp_time, self.get_clip_screen_all_time/self.fill_count,
+             transfer_rgb_to_features_temp_time, self.transfer_rgb_to_features_all_time/self.fill_count,
+             flip_temp_time, self.flip_all_time/self.fill_count,
+             get_overlap_temp_time, self.get_overlap_all_time/self.fill_count, *t_f]
         return screen_data_all, screen_data_players, t
 
     def render_all_balls_colorful(self, screen, food_balls, thorns_balls, spore_balls, players, player_num_per_team):
