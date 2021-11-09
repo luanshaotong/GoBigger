@@ -45,23 +45,61 @@ class EnvRender(BaseRender):
         self.with_speed = obs_settings.get('with_speed', False)
         self.with_all_vision = obs_settings.get('with_all_vision', False)
 
-    def fill_all(self, screen, food_balls, thorns_balls, spore_balls, players):
+    def fill_food_balls(self, balls):
+        if len(balls) == 0:
+            return np.zeros((self.width, self.height), dtype=int)
+        else:
+            screen = pygame.Surface((self.width, self.height), depth=8)
+            for ball in balls:
+                pygame.draw.circle(screen, (1), ball.position, ball.radius)
+            return np.rot90(np.fliplr(pygame.surfarray.array2d(screen)))
+
+    def fill_spore_balls(self, balls):
+        if len(balls) == 0:
+            return np.zeros((self.width, self.height), dtype=int)
+        else:
+            screen = pygame.Surface((self.width, self.height), depth=8)
+            for ball in balls:
+                pygame.draw.circle(screen, (1), ball.position, ball.radius)
+            return np.rot90(np.fliplr(pygame.surfarray.array2d(screen)))
+
+    def fill_thorns_balls(self, balls):
+        if len(balls) == 0:
+            return np.zeros((self.width, self.height), dtype=int)
+        else:
+            screen = pygame.Surface((self.width, self.height), depth=8)
+            for ball in balls:
+                pygame.draw.polygon(screen, (1), to_aliased_circle(ball.position, ball.radius))
+            return np.rot90(np.fliplr(pygame.surfarray.array2d(screen)))
+
+    def fill_clone_balls(self, balls):
+        if len(balls) == 0:
+            return np.zeros((self.width, self.height), dtype=int)
+        else:
+            screen = pygame.Surface((self.width, self.height), depth=8)
+            for ball in balls:
+                pygame.draw.circle(screen, (1), ball.position, ball.radius)
+            return np.rot90(np.fliplr(pygame.surfarray.array2d(screen)))
+
+    def fill_all(self, food_balls, thorns_balls, spore_balls, players):
         # render all balls
+        features = []
         t_1 = time.time()
-        for ball in food_balls:
-            pygame.draw.circle(screen, FOOD_COLOR_GRAYSCALE, ball.position, ball.radius)
+        food_features = self.fill_food_balls(food_balls)
         t_2 = time.time()
-        for ball in thorns_balls:
-            pygame.draw.polygon(screen, THORNS_COLOR_GRAYSCALE, to_aliased_circle(ball.position, ball.radius))
+        thorns_features = self.fill_thorns_balls(thorns_balls)
         t_3 = time.time()
-        for ball in spore_balls:
-            pygame.draw.circle(screen, SPORE_COLOR_GRAYSCALE, ball.position, ball.radius)
+        spore_features = self.fill_spore_balls(spore_balls)
         t_4 = time.time()
         for index, player in enumerate(players):
             for ball in player.get_balls():
-                pygame.draw.circle(screen, PLAYER_COLORS_GRAYSCALE[int(ball.owner)], ball.position, ball.radius)
+                player_features = self.fill_clone_balls(player.get_balls())
+                features.append(player_features)
         t_5 = time.time()
-        screen_data = pygame.surfarray.array2d(screen)
+        features.append(food_features)
+        features.append(spore_features)
+        features.append(thorns_features)
+        features = np.asarray(features, dtype=np.int)
         t_6 = time.time()
         self.fill_food_all_time += t_2-t_1
         self.fill_thorns_all_time = t_3-t_2
@@ -75,14 +113,7 @@ class EnvRender(BaseRender):
                              t_6-t_5, self.fill_array_all_time/self.fill_count]
 
     def get_clip_screen(self, screen_data, rectangle):
-        if len(screen_data.shape) == 3:
-            screen_data_clip = screen_data[rectangle[0]:rectangle[2], 
-                                           rectangle[1]:rectangle[3], :]
-        elif len(screen_data.shape) == 2:
-            screen_data_clip = screen_data[rectangle[0]:rectangle[2], 
-                                           rectangle[1]:rectangle[3]]
-        else:
-            raise NotImplementedError
+        screen_data_clip = screen_data[:, rectangle[0]:rectangle[2], rectangle[1]:rectangle[3]]
         return screen_data_clip
 
     def get_rectangle_by_player(self, player):
@@ -130,7 +161,6 @@ class EnvRender(BaseRender):
                     #                      'player': player.name, 'team': player.team_name})
                     ret['clone'].append({ball.position.x, ball.position.y, ball.radius, 
                                          player.name, player.team_name})
-
         return ret
 
     def get_overlap_wo_rectangle(self, food_balls, thorns_balls, spore_balls, players):
@@ -187,9 +217,7 @@ class EnvRender(BaseRender):
         self.fill_count += 1
         t1 = time.time()
         if self.with_spatial:
-            screen_all = pygame.Surface((self.width, self.height), depth=8)
-            screen_all.fill(BACKGROUND_GRAYSCALE)
-            screen_data_all, t_f = self.fill_all(screen_all, food_balls, thorns_balls, spore_balls, players)
+            screen_data_all, t_f = self.fill_all(food_balls, thorns_balls, spore_balls, players)
         t2 = time.time()
         screen_data_players = {}
 
@@ -229,12 +257,10 @@ class EnvRender(BaseRender):
                 rectangle = self.get_rectangle_by_player(player)
                 t5 = time.time()
                 if self.with_spatial:
-                    screen_data_player = self.get_clip_screen(screen_data_all, rectangle=rectangle)
+                    feature_layers = self.get_clip_screen(screen_data_all, rectangle=rectangle)
                     t6 = time.time()
-                    screen_data_player = np.fliplr(screen_data_player)
-                    screen_data_player = np.rot90(screen_data_player)
                     t9 = time.time()
-                    feature_layers, t_transfer = self.transfer_rgb_to_features(screen_data_player, player_num=len(players))
+                    t_transfer = 0
                 t7 = time.time()
                 if self.with_speed:
                     overlap = self.get_overlap_with_speed(rectangle, food_balls, thorns_balls, spore_balls, players)
