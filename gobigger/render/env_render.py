@@ -83,7 +83,7 @@ class EnvRender(BaseRender):
 
     def fill_all(self, food_balls, thorns_balls, spore_balls, players):
         # render all balls
-        features = np.zeros((3+len(players),))
+        features = np.zeros((3+len(players), self.width, self.height))
         t_1 = time.time()
         features[len(players)] = self.fill_food_balls(food_balls)
         t_2 = time.time()
