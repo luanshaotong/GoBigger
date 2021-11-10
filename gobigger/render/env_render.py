@@ -83,22 +83,18 @@ class EnvRender(BaseRender):
 
     def fill_all(self, food_balls, thorns_balls, spore_balls, players):
         # render all balls
-        features = []
+        features = np.zeros((3+len(players),))
         t_1 = time.time()
-        food_features = self.fill_food_balls(food_balls)
+        features[len(players)] = self.fill_food_balls(food_balls)
         t_2 = time.time()
-        thorns_features = self.fill_thorns_balls(thorns_balls)
+        features[len(players)+2] = self.fill_thorns_balls(thorns_balls)
         t_3 = time.time()
-        spore_features = self.fill_spore_balls(spore_balls)
+        features[len(players)+1] = self.fill_spore_balls(spore_balls)
         t_4 = time.time()
         for index, player in enumerate(players):
-            player_features = self.fill_clone_balls(player.get_balls())
-            features.append(player_features)
+            features[int(player.owner)] = self.fill_clone_balls(player.get_balls())
         t_5 = time.time()
-        features.append(food_features)
-        features.append(spore_features)
-        features.append(thorns_features)
-        features = np.asarray(features, dtype=np.int)
+        import pdb; pdb.set_trace()
         t_6 = time.time()
         self.fill_food_all_time += t_2-t_1
         self.fill_thorns_all_time = t_3-t_2
