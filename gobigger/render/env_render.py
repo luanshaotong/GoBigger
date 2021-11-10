@@ -92,7 +92,7 @@ class EnvRender(BaseRender):
         features[len(players)+1] = self.fill_spore_balls(spore_balls)
         t_4 = time.time()
         for index, player in enumerate(players):
-            features[int(player.owner)] = self.fill_clone_balls(player.get_balls())
+            features[int(player.name)] = self.fill_clone_balls(player.get_balls())
         t_5 = time.time()
         import pdb; pdb.set_trace()
         t_6 = time.time()
