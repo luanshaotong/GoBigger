@@ -94,7 +94,6 @@ class EnvRender(BaseRender):
         for index, player in enumerate(players):
             features[int(player.name)] = self.fill_clone_balls(player.get_balls())
         t_5 = time.time()
-        import pdb; pdb.set_trace()
         t_6 = time.time()
         self.fill_food_all_time += t_2-t_1
         self.fill_thorns_all_time = t_3-t_2
