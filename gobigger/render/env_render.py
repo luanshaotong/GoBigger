@@ -96,10 +96,10 @@ class EnvRender(BaseRender):
         t_5 = time.time()
         t_6 = time.time()
         self.fill_food_all_time += t_2-t_1
-        self.fill_thorns_all_time = t_3-t_2
-        self.fill_spore_all_time = t_4-t_3
-        self.fill_player_all_time = t_5-t_4
-        self.fill_array_all_time = t_6-t_5
+        self.fill_thorns_all_time += t_3-t_2
+        self.fill_spore_all_time += t_4-t_3
+        self.fill_player_all_time += t_5-t_4
+        self.fill_array_all_time += t_6-t_5
         return features, [t_2-t_1, self.fill_food_all_time/self.fill_count,
                              t_3-t_2, self.fill_thorns_all_time/self.fill_count,
                              t_4-t_3, self.fill_spore_all_time/self.fill_count,
