@@ -141,41 +141,41 @@ class EnvRender(BaseRender):
         thorns_count = 0
         spore_count = 0
         clone_count = 0
-        food = np.zeros((2500*3))
-        thorns = np.zeros((20*3))
-        spore = np.zeros((10000*3))
+        food = 2500*[3*[None]]
+        thorns = 20*[3*[None]]
+        spore = 10000*[3*[None]]
         clone = 100*[5*[None]]
         for ball in food_balls:
             if ball.judge_in_rectangle(rectangle):
                 # ret['food'].append({'position': tuple(ball.position), 'radius': ball.radius})
                 # ret['food'].append([ball.position.x, ball.position.y, ball.radius])
-                food[food_count*3] = ball.position.x
-                food[food_count*3+1] = ball.position.y
-                food[food_count*3+2] = ball.radius
+                food[food_count][0] = ball.position.x
+                food[food_count][1] = ball.position.y
+                food[food_count][2] = ball.radius
                 food_count += 1
-        food = food[:food_count*3]
-        ret['food'] = food.reshape(food_count, 3)
+        food = food[:food_count]
+        ret['food'] = food
 
         for ball in thorns_balls:
             if ball.judge_in_rectangle(rectangle):
                 # ret['thorns'].append({'position': tuple(ball.position), 'radius': ball.radius})
                 # ret['thorns'].append([ball.position.x, ball.position.y, ball.radius])
-                thorns[thorns_count*3] = ball.position.x
-                thorns[thorns_count*3+1] = ball.position.y
-                thorns[thorns_count*3+2] = ball.radius
+                thorns[thorns_count][0] = ball.position.x
+                thorns[thorns_count][1] = ball.position.y
+                thorns[thorns_count][2] = ball.radius
                 thorns_count += 1
-        thorns = thorns[:thorns_count*3]
-        ret['thorns'] = thorns.reshape(thorns_count, 3)
+        thorns = thorns[:thorns_count]
+        ret['thorns'] = thorns
 
         for ball in spore_balls:
             if ball.judge_in_rectangle(rectangle):
                 # ret['spore'].append([ball.position.x, ball.position.y, ball.radius])
-                spore[spore_count*3] = ball.position.x
-                spore[spore_count*3+1] = ball.position.y
-                spore[spore_count*3+2] = ball.radius
+                spore[spore_count][0] = ball.position.x
+                spore[spore_count][1] = ball.position.y
+                spore[spore_count][2] = ball.radius
                 spore_count += 1
-        spore = spore[:spore_count*3]
-        ret['spore'] = spore.reshape(spore_count, 3)
+        spore = spore[:spore_count]
+        ret['spore'] = spore
 
         for player in players:
             for ball in player.get_balls():
