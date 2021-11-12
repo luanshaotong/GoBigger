@@ -39,6 +39,11 @@ class EnvRender(BaseRender):
         self.fill_array_all_time = 0
         self.flip_all_time = 0
         self.t_transfer_all_time = 0
+        self.get_overlap_init_all_time = 0
+        self.get_overlap_food_all_time = 0
+        self.get_overlap_thorns_all_time = 0
+        self.get_overlap_spore_all_time = 0
+        self.get_overlap_clone_all_time = 0
 
     def set_obs_settings(self, obs_settings):
         self.with_spatial = obs_settings.get('with_spatial', True)
@@ -136,6 +141,7 @@ class EnvRender(BaseRender):
         return rectangle
 
     def get_overlap(self, rectangle, food_balls, thorns_balls, spore_balls, players):
+        t1 = time.time()
         ret = {}
         food_count = 0
         thorns_count = 0
@@ -145,6 +151,7 @@ class EnvRender(BaseRender):
         thorns = 20*[3*[None]]
         spore = 10000*[3*[None]]
         clone = 100*[5*[None]]
+        t2 = time.time()
         for ball in food_balls:
             if ball.judge_in_rectangle(rectangle):
                 # ret['food'].append({'position': tuple(ball.position), 'radius': ball.radius})
@@ -156,6 +163,7 @@ class EnvRender(BaseRender):
         food = food[:food_count]
         ret['food'] = food
 
+        t3 = time.time()
         for ball in thorns_balls:
             if ball.judge_in_rectangle(rectangle):
                 # ret['thorns'].append({'position': tuple(ball.position), 'radius': ball.radius})
@@ -167,6 +175,7 @@ class EnvRender(BaseRender):
         thorns = thorns[:thorns_count]
         ret['thorns'] = thorns
 
+        t4 = time.time()
         for ball in spore_balls:
             if ball.judge_in_rectangle(rectangle):
                 # ret['spore'].append([ball.position.x, ball.position.y, ball.radius])
@@ -177,6 +186,7 @@ class EnvRender(BaseRender):
         spore = spore[:spore_count]
         ret['spore'] = spore
 
+        t5 = time.time()
         for player in players:
             for ball in player.get_balls():
                 if ball.judge_in_rectangle(rectangle):
@@ -192,8 +202,9 @@ class EnvRender(BaseRender):
                     clone_count += 1
         clone = clone[:clone_count]
         ret['spore'] = clone
+        t6 = time.time()
 
-        return ret
+        return ret, [t2-t1, t_3-t_2, t_4-t_3, t5-t4, t6-t5]
 
     def get_overlap_wo_rectangle(self, food_balls, thorns_balls, spore_balls, players):
         ret = {'food': [], 'thorns': [], 'spore': [], 'clone': []}
@@ -284,6 +295,12 @@ class EnvRender(BaseRender):
             flip_temp_time = 0
             get_overlap_temp_time = 0
             t_transfer_temp_time = 0
+            get_overlap_init_temp_time = 0
+            get_overlap_food_temp_time = 0
+            get_overlap_thorns_temp_time = 0
+            get_overlap_spore_temp_time = 0
+            get_overlap_clone_temp_time = 0
+
             for player in players:
                 t4 = time.time()
                 rectangle = self.get_rectangle_by_player(player)
@@ -297,7 +314,7 @@ class EnvRender(BaseRender):
                 if self.with_speed:
                     overlap = self.get_overlap_with_speed(rectangle, food_balls, thorns_balls, spore_balls, players)
                 else:
-                    overlap = self.get_overlap(rectangle, food_balls, thorns_balls, spore_balls, players)
+                    overlap, t_overlap = self.get_overlap(rectangle, food_balls, thorns_balls, spore_balls, players)
                 t8 = time.time()
                 screen_data_players[player.name] = {
                     'feature_layers': feature_layers,
@@ -311,6 +328,11 @@ class EnvRender(BaseRender):
                 flip_temp_time += t9 - t6
                 get_overlap_temp_time += t8-t7
                 t_transfer_temp_time += t_transfer
+                get_overlap_init_temp_time += t_overlap[0]
+                get_overlap_food_temp_time += t_overlap[1]
+                get_overlap_thorns_temp_time += t_overlap[2]
+                get_overlap_spore_temp_time += t_overlap[3]
+                get_overlap_clone_temp_time += t_overlap[4]
 
             self.get_rectangle_by_player_all_time += get_rectangle_by_player_temp_time
             self.get_clip_screen_all_time += get_clip_screen_temp_time
@@ -318,6 +340,12 @@ class EnvRender(BaseRender):
             self.flip_all_time += flip_temp_time
             self.get_overlap_all_time += get_overlap_temp_time
             self.t_transfer_all_time += t_transfer_temp_time
+            self.get_overlap_init_all_time += get_overlap_init_temp_time
+            self.get_overlap_food_all_time += get_overlap_food_temp_time
+            self.get_overlap_thorns_all_time += get_overlap_thorns_temp_time
+            self.get_overlap_spore_all_time += get_overlap_spore_temp_time
+            self.get_overlap_clone_all_time += get_overlap_clone_temp_time
+
         self.fill_all_time += t2-t1
         t = [self.fill_count, t2-t1, self.fill_all_time/self.fill_count,
              get_rectangle_by_player_temp_time, self.get_rectangle_by_player_all_time/self.fill_count,
@@ -325,7 +353,13 @@ class EnvRender(BaseRender):
              transfer_rgb_to_features_temp_time, self.transfer_rgb_to_features_all_time/self.fill_count,
              t_transfer_temp_time, self.t_transfer_all_time/self.fill_count,
              flip_temp_time, self.flip_all_time/self.fill_count,
-             get_overlap_temp_time, self.get_overlap_all_time/self.fill_count, *t_f]
+             get_overlap_temp_time, self.get_overlap_all_time/self.fill_count, *t_f,
+             get_overlap_init_temp_time, self.get_overlap_init_all_time/self.fill_count,
+             get_overlap_food_temp_time, self.get_overlap_food_all_time/self.fill_count,
+             get_overlap_thorns_temp_time, self.get_overlap_thorns_all_time/self.fill_count,
+             get_overlap_spore_temp_time, self.get_overlap_spore_all_time/self.fill_count,
+             get_overlap_clone_temp_time, self.get_overlap_clone_all_time/self.fill_count,
+             ]
         return screen_data_all, screen_data_players, t
 
     def render_all_balls_colorful(self, screen, food_balls, thorns_balls, spore_balls, players, player_num_per_team):
