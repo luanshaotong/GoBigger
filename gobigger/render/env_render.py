@@ -159,12 +159,14 @@ class EnvRender(BaseRender):
             if ball.position.x < food_rectangle[0] or ball.position.x > food_rectangle[2] \
                     or ball.position.y < food_rectangle[1] or ball.position.y > food_rectangle[3]:
                 continue
-            if ball.judge_in_rectangle(rectangle):
+            else:
+            # if ball.judge_in_rectangle(rectangle):
                 # ret['food'].append({'position': tuple(ball.position), 'radius': ball.radius})
                 # ret['food'].append([ball.position.x, ball.position.y, ball.radius])
                 food[food_count][0] = ball.position.x
                 food[food_count][1] = ball.position.y
                 food[food_count][2] = ball.radius
+
                 food_count += 1
         food = food[:food_count]
         ret['food'] = food
@@ -207,7 +209,7 @@ class EnvRender(BaseRender):
                     clone[clone_count][4] = player.team_name
                     clone_count += 1
         clone = clone[:clone_count]
-        ret['spore'] = clone
+        ret['clone'] = clone
         t6 = time.time()
 
         return ret, [t2-t1, t3-t2, t4-t3, t5-t4, t6-t5]
