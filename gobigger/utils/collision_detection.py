@@ -134,6 +134,75 @@ class PrecisionCollisionDetection(BaseCollisionDetection) :
         return results
 
 
+class PrecisionCollisionDetection2(BaseCollisionDetection) :
+    '''
+    Overview:
+        Precision Approximation Algorithm
+        Divide the map into several rows according to the accuracy that has been set, dynamically maintain the row information in each frame, and search by row
+    '''
+    def __init__(self, border: Border, precision : int = 500) -> None:
+        '''
+        Parameter:
+            precision <int>: the precision of dividing rows
+        '''
+        super(PrecisionCollisionDetection2, self).__init__(border = border)
+        self.precision = precision
+
+    def get_row(self, x) -> int:
+        '''
+        Overview:
+            Get the row coordinates of the ball
+        Parameter:
+            node <BaseBall>: The ball need to get its row coordinates
+        '''
+        return int((x - self.border.minx) / self.border.height * self.precision)
+
+
+    def solve(self, query_list: list, gallery_list: list):
+        '''
+        Overview:
+            First, you need to sort the balls in each row according to the ordinate. For the balls in query_list, first abstract the boundary of the ball into a rectangle, then traverse each row in the rectangle, and find the first ball covered by the query through dichotomy in each row, and then Enumerate the balls in sequence until the ordinate exceeds the boundary of the query rectangle
+        Parameters:
+            query_list <List[BaseBall]>: List of balls that need to be queried for collision
+            gallery_list <List[BaseBall]>: List of all balls
+        Returns:
+            results <Dict[int: List[BaseBall]> return value
+                int value denotes:
+                    the subscript in query_list
+                string value denotes:
+                    List of balls that collided with the query corresponding to the subscript
+        '''
+
+        vec = {}
+        for id, node in enumerate(gallery_list): 
+            row_id = self.get_row(node.position.x)
+            if  row_id not in vec:
+                vec[row_id] = []
+            vec[row_id].append((id, node.position.y))
+        for val in vec.values():
+            val.sort(key = lambda x: x[1])
+        results = {}
+        for id, query in enumerate(query_list):
+            results[id] = []
+            left = query.position.y - query.radius
+            right = query.position.y + query.radius
+            top = self.get_row(query.position.x - query.radius)
+            bottom = self.get_row(query.position.x + query.radius)
+            for i in range(top, bottom + 1):
+                if i not in vec: continue
+                l = len(vec[i])
+                start_pos = 0
+                for j in range(15, -1, -1):
+                    if start_pos+(2**j) < l and vec[i][start_pos+(2**j)][1] < left:
+                        start_pos += 2**j
+                for j in range(start_pos, l):
+                    if vec[i][j][1] > right: break
+                    if query.judge_cover(gallery_list[vec[i][j][0]]):
+                        results[id].append(gallery_list[vec[i][j][0]])
+        
+        return results
+
+
 class RebuildQuadTreeCollisionDetection(BaseCollisionDetection) :
     '''
         Overview:
@@ -233,6 +302,8 @@ def create_collision_detection(cd_type, **cd_kwargs):
         return ExhaustiveCollisionDetection(**cd_kwargs)
     if cd_type == 'precision':
         return PrecisionCollisionDetection(**cd_kwargs)
+    if cd_type == 'precision2':
+        return PrecisionCollisionDetection2(**cd_kwargs)
     if cd_type == 'rebuild_quadtree':
         return RebuildQuadTreeCollisionDetection(**cd_kwargs)
     if cd_type == 'remove_quadtree':
