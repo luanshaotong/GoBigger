@@ -152,11 +152,12 @@ class EnvRender(BaseRender):
         spore = 10000*[3*[None]]
         clone = 100*[5*[None]]
         t2 = time.time()
+
+        food_radius = food_balls[0].radius
+        food_rectangle = [rectangle[0] - food_radius, rectangle[1] - food_radius, rectangle[2] + food_radius, rectangle[3] + food_radius]
         for ball in food_balls:
-            if ball.position.x < rectangle[0] - ball.radius \
-                or ball.position.x > rectangle[2] + ball.radius \
-                or ball.position.y < rectangle[1] - ball.radius \
-                or ball.position.y > rectangle[3] + ball.radius:
+            if ball.position.x < food_rectangle[0] or ball.position.x > food_rectangle[2] \
+                    or ball.position.y < food_rectangle[1] or ball.position.y > food_rectangle[3]:
                 continue
             if ball.judge_in_rectangle(rectangle):
                 # ret['food'].append({'position': tuple(ball.position), 'radius': ball.radius})
