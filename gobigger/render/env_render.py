@@ -136,25 +136,63 @@ class EnvRender(BaseRender):
         return rectangle
 
     def get_overlap(self, rectangle, food_balls, thorns_balls, spore_balls, players):
-        ret = {'food': [], 'thorns': [], 'spore': [], 'clone': []}
+        ret = {}
+        food_count = 0
+        thorns_count = 0
+        spore_count = 0
+        clone_count = 0
+        food = np.zeros((2500*3))
+        thorns = np.zeros((20*3))
+        spore = np.zeros((10000*3))
+        clone = 100*[5*[None]]
         for ball in food_balls:
             if ball.judge_in_rectangle(rectangle):
                 # ret['food'].append({'position': tuple(ball.position), 'radius': ball.radius})
-                ret['food'].append([ball.position.x, ball.position.y, ball.radius])
+                # ret['food'].append([ball.position.x, ball.position.y, ball.radius])
+                food[food_count*3] = ball.position.x
+                food[food_count*3+1] = ball.position.y
+                food[food_count*3+2] = ball.radius
+                food_count += 1
+        food = food[:food_count*3]
+        ret['food'] = food.reshape(food_count, 3)
+
         for ball in thorns_balls:
             if ball.judge_in_rectangle(rectangle):
                 # ret['thorns'].append({'position': tuple(ball.position), 'radius': ball.radius})
-                ret['thorns'].append([ball.position.x, ball.position.y, ball.radius])
+                # ret['thorns'].append([ball.position.x, ball.position.y, ball.radius])
+                thorns[thorns_count*3] = ball.position.x
+                thorns[thorns_count*3+1] = ball.position.y
+                thorns[thorns_count*3+2] = ball.radius
+                thorns_count += 1
+        thorns = thorns[:thorns_count*3]
+        ret['thorns'] = thorns.reshape(thorns_count, 3)
+
         for ball in spore_balls:
             if ball.judge_in_rectangle(rectangle):
-                ret['spore'].append([ball.position.x, ball.position.y, ball.radius])
+                # ret['spore'].append([ball.position.x, ball.position.y, ball.radius])
+                spore[spore_count*3] = ball.position.x
+                spore[spore_count*3+1] = ball.position.y
+                spore[spore_count*3+2] = ball.radius
+                spore_count += 1
+        spore = spore[:spore_count*3]
+        ret['spore'] = spore.reshape(spore_count, 3)
+
         for player in players:
             for ball in player.get_balls():
                 if ball.judge_in_rectangle(rectangle):
                     # ret['clone'].append({'position': tuple(ball.position), 'radius': ball.radius, 
                     #                      'player': player.name, 'team': player.team_name})
-                    ret['clone'].append({ball.position.x, ball.position.y, ball.radius, 
-                                         player.name, player.team_name})
+                    # ret['clone'].append({ball.position.x, ball.position.y, ball.radius, 
+                    #                      player.name, player.team_name})
+                    clone[clone_count][0] = ball.position.x
+                    clone[clone_count][1] = ball.position.y
+                    clone[clone_count][2] = ball.radius
+                    clone[clone_count][3] = player.name
+                    clone[clone_count][4] = player.team_name
+                    clone_count += 1
+        clone = clone[:clone_count]
+        ret['spore'] = clone
+
         return ret
 
     def get_overlap_wo_rectangle(self, food_balls, thorns_balls, spore_balls, players):
