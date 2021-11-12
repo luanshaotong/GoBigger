@@ -153,6 +153,11 @@ class EnvRender(BaseRender):
         clone = 100*[5*[None]]
         t2 = time.time()
         for ball in food_balls:
+            if ball.position.x < rectangle[0] - ball.radius \
+                or ball.position.x > rectangle[2] + ball.radius \
+                or ball.position.y < rectangle[1] - ball.radius \
+                or ball.position.y > rectangle[3] + ball.radius:
+                continue
             if ball.judge_in_rectangle(rectangle):
                 # ret['food'].append({'position': tuple(ball.position), 'radius': ball.radius})
                 # ret['food'].append([ball.position.x, ball.position.y, ball.radius])
