@@ -163,9 +163,10 @@ class EnvRender(BaseRender):
             # if ball.judge_in_rectangle(rectangle):
                 # ret['food'].append({'position': tuple(ball.position), 'radius': ball.radius})
                 # ret['food'].append([ball.position.x, ball.position.y, ball.radius])
-                food[food_count][0] = ball.position.x
-                food[food_count][1] = ball.position.y
-                food[food_count][2] = ball.radius
+                # food[food_count][0] = ball.position.x
+                # food[food_count][1] = ball.position.y
+                # food[food_count][2] = ball.radius
+                food[food_count] = [ball.position.x, ball.position.y, ball.radius]
 
                 food_count += 1
         food = food[:food_count]
