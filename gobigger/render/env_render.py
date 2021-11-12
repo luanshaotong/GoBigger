@@ -204,7 +204,7 @@ class EnvRender(BaseRender):
         ret['spore'] = clone
         t6 = time.time()
 
-        return ret, [t2-t1, t_3-t_2, t_4-t_3, t5-t4, t6-t5]
+        return ret, [t2-t1, t3-t2, t4-t3, t5-t4, t6-t5]
 
     def get_overlap_wo_rectangle(self, food_balls, thorns_balls, spore_balls, players):
         ret = {'food': [], 'thorns': [], 'spore': [], 'clone': []}
