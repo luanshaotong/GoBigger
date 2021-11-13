@@ -141,7 +141,7 @@ class PrecisionCollisionDetection2(BaseCollisionDetection) :
         Precision Approximation Algorithm
         Divide the map into several rows according to the accuracy that has been set, dynamically maintain the row information in each frame, and search by row
     '''
-    def __init__(self, border: Border, precision : int = 500) -> None:
+    def __init__(self, border: Border, precision : int = 50) -> None:
         '''
         Parameter:
             precision <int>: the precision of dividing rows
