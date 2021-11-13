@@ -1,5 +1,6 @@
 import numpy as np
 import logging
+import time
 
 from .structures import Border, QuadNode
 
@@ -161,7 +162,12 @@ class PrecisionCollisionDetection2(BaseCollisionDetection) :
     def solve(self, query_list: list, gallery_list: list):
         '''
         Overview:
-            First, you need to sort the balls in each row according to the ordinate. For the balls in query_list, first abstract the boundary of the ball into a rectangle, then traverse each row in the rectangle, and find the first ball covered by the query through dichotomy in each row, and then Enumerate the balls in sequence until the ordinate exceeds the boundary of the query rectangle
+            First, you need to sort the balls in each row according to the ordinate. 
+            For the balls in query_list, first abstract the boundary of the ball into 
+            a rectangle, then traverse each row in the rectangle, and find the first 
+            ball covered by the query through dichotomy in each row, and then Enumerate 
+            the balls in sequence until the ordinate exceeds the boundary of the query 
+            rectangle.
         Parameters:
             query_list <List[BaseBall]>: List of balls that need to be queried for collision
             gallery_list <List[BaseBall]>: List of all balls
@@ -174,13 +180,16 @@ class PrecisionCollisionDetection2(BaseCollisionDetection) :
         '''
 
         vec = {}
+        t1 = time.time()
         for id, node in enumerate(gallery_list): 
             row_id = self.get_row(node.position.x)
             if  row_id not in vec:
                 vec[row_id] = []
             vec[row_id].append((id, node.position.y))
+        t2 = time.time()
         for val in vec.values():
             val.sort(key = lambda x: x[1])
+        t3 = time.time()
         results = {}
         for id, query in enumerate(query_list):
             results[id] = []
@@ -199,8 +208,9 @@ class PrecisionCollisionDetection2(BaseCollisionDetection) :
                     if vec[i][j][1] > right: break
                     if query.judge_cover(gallery_list[vec[i][j][0]]):
                         results[id].append(gallery_list[vec[i][j][0]])
+        t4 = time.time()
         
-        return results
+        return results, [t2-t1, t3-t2, t4-t3]
 
 
 class RebuildQuadTreeCollisionDetection(BaseCollisionDetection) :

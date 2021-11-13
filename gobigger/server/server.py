@@ -113,6 +113,9 @@ class Server:
         self.solve_time_all = 0
         self.collision_time_all = 0
         self.manager_step_time_all = 0
+        self.solve_1_time_all = 0
+        self.solve_2_time_all = 0
+        self.solve_3_time_all = 0
         self.step_count = 0
 
     def spawn_balls(self):
@@ -188,7 +191,7 @@ class Server:
         total_balls.extend(self.spore_manager.get_balls())
         total_balls.extend(self.food_manager.get_balls())
         t5 = time.time()
-        collisions_dict = self.collision_detection.solve(moving_balls, total_balls)
+        collisions_dict, t_solve = self.collision_detection.solve(moving_balls, total_balls)
         t6 = time.time()
         # Process each ball in moving_balls
         for index, moving_ball in enumerate(moving_balls):
@@ -211,6 +214,9 @@ class Server:
         self.solve_time_all += t6 - t5
         self.collision_time_all += t7 - t6
         self.manager_step_time_all += t8 - t7
+        self.solve_1_time_all += t_solve[0]
+        self.solve_2_time_all += t_solve[1]
+        self.solve_3_time_all += t_solve[2]
         self.step_count += 1
         # logging.debug('{} total={:.4f}/{:.4f}, action={:.4f}/{:.4f}, move={:.4f}/{:.4f}, adjust={:.4f}/{:.4f}, extend={:.4f}/{:.4f}, solve={:.4f}/{:.4f}, collision={:.4f}/{:.4f}, manager={:.4f}/{:.4f}'\
         #     .format(self.step_count, t7 - t1, self.step_time_all/self.step_count,
@@ -228,7 +234,11 @@ class Server:
                 t5 - t4, self.extend_time_all/self.step_count,
                 t6 - t5, self.solve_time_all/self.step_count,
                 t7 - t6, self.collision_time_all/self.step_count,
-                t8 - t7, self.manager_step_time_all/self.step_count]
+                t8 - t7, self.manager_step_time_all/self.step_count,
+                t_solve[0], self.solve_1_time_all/self.step_count,
+                t_solve[1], self.solve_2_time_all/self.step_count,
+                t_solve[2], self.solve_3_time_all/self.step_count,
+                ]
 
 
     def deal_with_collision(self, moving_ball, target_ball):
