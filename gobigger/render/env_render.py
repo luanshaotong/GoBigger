@@ -162,8 +162,9 @@ class EnvRender(BaseRender):
         for ball in food_balls:
             # if ball.position.x < food_rectangle[0] or ball.position.x > food_rectangle[2] \
             #         or ball.position.y < food_rectangle[1] or ball.position.y > food_rectangle[3]:
-            if ball.position.x < fr0 or ball.position.x > fr2 \
-                    or ball.position.y < fr1 or ball.position.y > fr3:
+            x = ball.position.x
+            y = ball.position.y
+            if x < fr0 or x > fr2 or y < fr1 or y > fr3:
                 continue
             else:
                 food[food_count][0] = ball.position.x
