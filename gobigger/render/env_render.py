@@ -154,21 +154,18 @@ class EnvRender(BaseRender):
         t2 = time.time()
 
         food_radius = food_balls[0].radius
-        food_rectangle = [rectangle[0] - food_radius, rectangle[1] - food_radius, rectangle[2] + food_radius, rectangle[3] + food_radius]
-        fr0 = food_rectangle[0]
-        fr1 = food_rectangle[1]
-        fr2 = food_rectangle[2]
-        fr3 = food_rectangle[3]
+        fr0 = rectangle[0] - food_radius
+        fr1 = rectangle[1] - food_radius
+        fr2 = rectangle[2] + food_radius
+        fr3 = rectangle[3] + food_radius
         for ball in food_balls:
-            # if ball.position.x < food_rectangle[0] or ball.position.x > food_rectangle[2] \
-            #         or ball.position.y < food_rectangle[1] or ball.position.y > food_rectangle[3]:
             x = ball.position.x
             y = ball.position.y
             if x < fr0 or x > fr2 or y < fr1 or y > fr3:
                 continue
             else:
-                food[food_count][0] = ball.position.x
-                food[food_count][1] = ball.position.y
+                food[food_count][0] = x
+                food[food_count][1] = y
                 food[food_count][2] = ball.radius
                 food_count += 1
         food = food[:food_count]
